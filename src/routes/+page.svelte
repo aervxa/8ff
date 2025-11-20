@@ -43,6 +43,11 @@
 				}
 			}
 
+			// Cancel if any modifier key is being pressed (SHIFT included since all words are lowercase)
+			if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+				return;
+			}
+
 			const allowedChars = 'abcdefghijklmnopqrstuvwxyz ';
 			// Ignore if chars are not allowed or if letter index is 14 (max length provided by api)
 			if (!allowedChars.includes(e.key) || letterTrack == 14) {
