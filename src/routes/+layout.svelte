@@ -1,6 +1,8 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import '@fontsource-variable/red-hat-mono/wght-italic.css';
+	import '@fontsource-variable/red-hat-mono/wght.css';
 
 	let { children } = $props();
 </script>
