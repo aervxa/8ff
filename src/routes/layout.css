@@ -19,3 +19,13 @@ html,
 body {
 	height: 100%;
 }
+
+.correct-letter {
+	background-color: green;
+}
+.incorrect-letter {
+	background-color: lightcoral;
+}
+.wrong-letter {
+	background-color: red;
+}
