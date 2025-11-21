@@ -7,6 +7,29 @@
 	let wordTrack = 0;
 	let letterTrack = 0;
 	let words: HTMLDivElement;
+	let caret: HTMLSpanElement;
+
+	const updateCaret = () => {
+		const wordsRect = words.getBoundingClientRect();
+		const word = words.querySelector(`[data-word="${wordTrack.toString()}"]`);
+		if (word) {
+			// caret's position is AFTER PREV letter
+			const prevLetter = word.querySelector(`[data-letter="${(letterTrack - 1).toString()}"]`);
+			// If prevLetter
+			if (prevLetter) {
+				const rect = prevLetter.getBoundingClientRect();
+				caret.style.top = rect.y - wordsRect.y + 'px';
+				caret.style.left = `calc(${rect.x - wordsRect.x}px + 1ch)`;
+			} else {
+				const rect = word.getBoundingClientRect();
+				caret.style.top = rect.y - wordsRect.y + 'px';
+				caret.style.left = rect.x - wordsRect.x + 'px';
+			}
+		} else {
+			// Remove caret when no words (after reaching end of wordlist)
+			caret.remove();
+		}
+	};
 
 	const keyListener = (e: KeyboardEvent) => {
 		// Select word and letter
@@ -41,6 +64,7 @@
 						letterTrack = prevWord.children.length; // set letter index to last letter of prevWord
 					}
 				}
+				updateCaret();
 			}
 
 			// Cancel if any modifier key is being pressed (SHIFT included since all words are lowercase)
@@ -80,11 +104,13 @@
 				}
 
 				letterTrack++; // increment letter index track
+				updateCaret();
 			}
 			// If word is over (if letter index is equal to word length, the word is over)
 			else if (letterTrack >= wordList[wordTrack].length) {
 				wordTrack++;
 				letterTrack = 0;
+				updateCaret();
 			}
 		}
 		// Remove listener once wordList is completed
@@ -96,10 +122,18 @@
 
 	onMount(() => {
 		window.addEventListener('keydown', keyListener);
+		updateCaret();
 	});
 </script>
 
-<div bind:this={words} class="line-clamp-3 flex max-w-prose flex-wrap gap-x-[1ch] text-3xl">
+<div
+	bind:this={words}
+	class="relative line-clamp-3 flex max-w-prose flex-wrap gap-x-[1ch] overflow-visible text-3xl"
+>
+	<span
+		bind:this={caret}
+		class="absolute top-0 left-0 z-10 h-[1.4em] w-0.75 -translate-x-0.5 animate-pulse rounded-full bg-primary"
+	></span>
 	{#each wordList as word, index}
 		<span data-word={index}>
 			{#each word as letter, index}
