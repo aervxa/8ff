@@ -49,13 +49,18 @@
 			}
 
 			const allowedChars = 'abcdefghijklmnopqrstuvwxyz ';
-			// Ignore if chars are not allowed or if letter index is 14 (max length provided by api)
-			if (!allowedChars.includes(e.key) || letterTrack == 14) {
+			// Ignore if chars are not allowed
+			if (!allowedChars.includes(e.key)) {
 				return;
 			}
 
 			// If key press is a letter
 			if (allowedChars.trim().includes(e.key)) {
+				// if letter index is 14 (max length of possible words is 13)
+				if (letterTrack == 14) {
+					return;
+				}
+
 				// If letter exists
 				if (letter) {
 					// If letter matches
@@ -94,7 +99,7 @@
 	});
 </script>
 
-<div bind:this={words} class="flex max-w-prose flex-wrap gap-x-[1ch] text-3xl line-clamp-3">
+<div bind:this={words} class="line-clamp-3 flex max-w-prose flex-wrap gap-x-[1ch] text-3xl">
 	{#each wordList as word, index}
 		<span data-word={index}>
 			{#each word as letter, index}
