@@ -38,6 +38,7 @@
 			const letter = word.querySelector(`[data-letter="${letterTrack.toString()}"]`);
 
 			if (e.key == 'Backspace') {
+				e.preventDefault();
 				// Remove letters
 				//  letter.previousElementSibling is cleaner, but doesn't work on the last index
 				const prevLetter = word.querySelector(`[data-letter="${(letterTrack - 1).toString()}"]`);
@@ -76,6 +77,10 @@
 			// Ignore if chars are not allowed
 			if (!allowedChars.includes(e.key)) {
 				return;
+			}
+			// prevent default behavior if valid key is pressed
+			else {
+				e.preventDefault();
 			}
 
 			// If key press is a letter
