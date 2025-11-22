@@ -51,9 +51,9 @@
 	};
 
 	const updateCaret = () => {
-		const wordsRect = words.getBoundingClientRect();
 		const word = words.querySelector(`[data-word="${wordTrack.toString()}"]`);
 		if (word) {
+			const wordsRect = words.getBoundingClientRect();
 			// caret's position is AFTER PREV letter
 			const prevLetter = word.querySelector(`[data-letter="${(letterTrack - 1).toString()}"]`);
 			// If prevLetter
