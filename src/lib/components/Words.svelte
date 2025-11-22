@@ -2,12 +2,53 @@
 	import { generate } from 'random-words';
 	import { onMount } from 'svelte';
 
+	const {
+		onComplete
+	}: {
+		onComplete: (data: { start: Date; end: Date }) => void;
+	} = $props();
+
 	const wordList = generate({ exactly: 99, minLength: 1, maxLength: 7 });
 
+	// words
 	let wordTrack = 0;
 	let letterTrack = 0;
 	let words: HTMLDivElement;
 	let caret: HTMLSpanElement;
+
+	// TODO: Countdown must have a way to be paused, maybe Esc
+
+	// countdown
+	let countdown = 5 * 1000; // 30 seconds
+	let lastTime = 0;
+	let animationFrame = 0;
+
+	const tick = () => {
+		const now = Date.now();
+		countdown -= now - lastTime;
+		lastTime = now;
+
+		console.log(countdown);
+
+		// If remaining time in countdown, continue ticking
+		if (countdown > 0) {
+			animationFrame = requestAnimationFrame(tick);
+		} else {
+			endCountdown();
+		}
+	};
+
+	const startCountdown = () => {
+		// Set time of starting countdown
+		lastTime = Date.now();
+		// Start countdown
+		animationFrame = requestAnimationFrame(tick);
+	};
+
+	const endCountdown = () => {
+		// End countdown
+		cancelAnimationFrame(animationFrame);
+	};
 
 	const updateCaret = () => {
 		const wordsRect = words.getBoundingClientRect();
@@ -78,10 +119,12 @@
 			if (!allowedChars.includes(e.key)) {
 				return;
 			}
+
 			// prevent default behavior if valid key is pressed
-			else {
-				e.preventDefault();
-			}
+			e.preventDefault();
+
+			// Start countdown
+			startCountdown();
 
 			// If key press is a letter
 			if (allowedChars.trim().includes(e.key)) {
