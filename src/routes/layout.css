@@ -21,25 +21,29 @@ body {
 }
 
 .word.incorrect {
-	@apply border-b-2 border-destructive/80;
+	@apply shadow-[inset_0_-2px_0_0] shadow-destructive/80;
+}
+
+.word.incorrect > .letter {
+	@apply text-shadow-secondary text-shadow-xs;
 }
 
 /* style letters that have no state */
 .word.incorrect > .letter:not(.correct):not(.incorrect):not(.wrong) {
-	@apply text-shadow-destructive/80 text-shadow-sm;
+	@apply text-shadow-destructive/80;
 }
 
 .letter {
-	@apply leading-0 opacity-40;
+	@apply leading-tight brightness-50;
 }
 .letter.correct {
-	opacity: 1;
+	@apply brightness-100;
 }
 .letter.incorrect {
-	opacity: 1;
+	@apply brightness-100;
 	color: var(--color-destructive);
 }
 .letter.wrong {
-	opacity: 0.4;
+	@apply brightness-40;
 	color: var(--color-destructive);
 }
