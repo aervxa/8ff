@@ -20,12 +20,17 @@ body {
 	height: 100%;
 }
 
+.letter {
+	@apply leading-relaxed opacity-40;
+}
 .correct-letter {
-	background-color: green;
+	opacity: 1;
 }
 .incorrect-letter {
-	background-color: lightcoral;
+	opacity: 1;
+	color: var(--color-destructive);
 }
 .wrong-letter {
-	background-color: red;
+	opacity: 0.4;
+	color: var(--color-destructive);
 }
