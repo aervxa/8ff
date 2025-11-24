@@ -21,7 +21,6 @@
 	let countdown = $state(COUNTDOWN);
 	let lastTime = 0;
 	let animationFrame = 0;
-	let running = false;
 
 	const generateWords = () => {
 		// empty wordList to remove UI states
@@ -44,9 +43,6 @@
 	};
 
 	const countdownTick = () => {
-		// if not running, stop
-		if (!running) return;
-
 		const now = Date.now();
 		countdown -= now - lastTime; // delta
 		lastTime = now;
@@ -61,16 +57,14 @@
 	};
 
 	const startCountdown = () => {
-		running = true;
 		// Set time of starting countdown
 		lastTime = Date.now();
-		// Start countdown
+		// Start/resume countdown
 		animationFrame = requestAnimationFrame(countdownTick);
 	};
 
 	const stopCountdown = () => {
-		running = false;
-		// End countdown
+		// End/pause countdown
 		cancelAnimationFrame(animationFrame);
 	};
 
