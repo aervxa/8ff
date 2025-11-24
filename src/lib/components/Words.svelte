@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { generate } from 'random-words';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	const {
 		onComplete
@@ -8,7 +8,7 @@
 		onComplete: (data: { start: Date; end: Date }) => void;
 	} = $props();
 
-	const wordList = generate({ exactly: 99, minLength: 1, maxLength: 7 });
+	let wordList: string | string[] = $state([]);
 
 	// words
 	let wordTrack = 0;
@@ -16,22 +16,44 @@
 	let words: HTMLDivElement;
 	let caret: HTMLSpanElement;
 
-	// TODO: Countdown must have a way to be paused, maybe Esc
-
 	// countdown
 	const COUNTDOWN = 5 * 1000; // 30 seconds
 	let countdown = $state(COUNTDOWN);
 	let lastTime = 0;
 	let animationFrame = 0;
+	let running = false;
 
-	const tick = () => {
+	const generateWords = () => {
+		// empty wordList to remove UI states
+		wordList = [];
+		// reset word index tracks
+		wordTrack = 0;
+		letterTrack = 0;
+		// Reset countdown
+		stopCountdown();
+		countdown = COUNTDOWN;
+
+		// Skip tick (will run after DOM updates according to empty wordList)
+		tick().then(() => {
+			// generate (new) words in wordList
+			wordList = generate({ exactly: 99, minLength: 1, maxLength: 7 });
+		});
+
+		// Update caret to positioning
+		updateCaret();
+	};
+
+	const countdownTick = () => {
+		// if not running, stop
+		if (!running) return;
+
 		const now = Date.now();
 		countdown -= now - lastTime; // delta
 		lastTime = now;
 
 		// If remaining time in countdown, continue ticking
 		if (countdown > 0) {
-			animationFrame = requestAnimationFrame(tick);
+			animationFrame = requestAnimationFrame(countdownTick);
 		} else {
 			countdown = 0;
 			stopCountdown();
@@ -39,13 +61,15 @@
 	};
 
 	const startCountdown = () => {
+		running = true;
 		// Set time of starting countdown
 		lastTime = Date.now();
 		// Start countdown
-		animationFrame = requestAnimationFrame(tick);
+		animationFrame = requestAnimationFrame(countdownTick);
 	};
 
 	const stopCountdown = () => {
+		running = false;
 		// End countdown
 		cancelAnimationFrame(animationFrame);
 	};
@@ -78,6 +102,12 @@
 		if (word) {
 			const letter = word.querySelector(`[data-letter="${letterTrack.toString()}"]`);
 
+			// To cancel or restart
+			if (e.key == 'Escape') {
+				generateWords();
+			}
+
+			// For removing input
 			if (e.key == 'Backspace') {
 				e.preventDefault();
 				// Remove letters
@@ -169,8 +199,10 @@
 	};
 
 	onMount(() => {
+		// Generate words
+		generateWords();
+		// Add listener for user input
 		window.addEventListener('keydown', keyListener);
-		updateCaret();
 	});
 </script>
 
