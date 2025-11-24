@@ -19,7 +19,8 @@
 	// TODO: Countdown must have a way to be paused, maybe Esc
 
 	// countdown
-	let countdown = 5 * 1000; // 30 seconds
+	const COUNTDOWN = 5 * 1000; // 30 seconds
+	let countdown = $state(COUNTDOWN);
 	let lastTime = 0;
 	let animationFrame = 0;
 
@@ -28,12 +29,11 @@
 		countdown -= now - lastTime;
 		lastTime = now;
 
-		console.log(countdown);
-
 		// If remaining time in countdown, continue ticking
 		if (countdown > 0) {
 			animationFrame = requestAnimationFrame(tick);
 		} else {
+			countdown = 0;
 			endCountdown();
 		}
 	};
@@ -145,7 +145,7 @@
 				// Create a new letter and append to word
 				else {
 					const newLetter = document.createElement('span');
-					newLetter.classList.add('wrong-letter');
+					newLetter.classList.add('letter', 'wrong-letter');
 					newLetter.dataset.letter = letterTrack.toString();
 					newLetter.innerHTML = e.key;
 					word.appendChild(newLetter);
@@ -174,21 +174,24 @@
 	});
 </script>
 
-<div
-	bind:this={words}
-	class="relative line-clamp-3 flex max-w-prose flex-wrap gap-x-[1ch] overflow-visible text-3xl"
->
-	<span
-		bind:this={caret}
-		class="absolute top-0 left-0 z-10 h-[1.4em] w-0.75 -translate-x-0.5 animate-pulse rounded-full bg-primary"
-	></span>
-	{#each wordList as word, index}
-		<span data-word={index}>
-			{#each word as letter, index}
-				<span data-letter={index} class="leading-relaxed opacity-60">
-					{letter}
-				</span>
-			{/each}
-		</span>
-	{/each}
+<div class="flex flex-col gap-4">
+	<!-- If countdown has alr started -->
+	<!-- {#if COUNTDOWN > countdown} -->
+	<p class="text-3xl text-primary">{Math.floor(countdown / 1000)}</p>
+	<!-- {/if} -->
+	<div bind:this={words} class="relative flex max-w-prose flex-wrap gap-x-[1ch] text-3xl">
+		<span
+			bind:this={caret}
+			class="absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary"
+		></span>
+		{#each wordList as word, index}
+			<span data-word={index}>
+				{#each word as letter, index}
+					<span data-letter={index} class="letter">
+						{letter}
+					</span>
+				{/each}
+			</span>
+		{/each}
+	</div>
 </div>
