@@ -1,4 +1,5 @@
 <script lang="ts">
+	import clsx from 'clsx';
 	import { generate } from 'random-words';
 	import { onMount, tick } from 'svelte';
 
@@ -242,10 +243,17 @@
 </script>
 
 <div class="flex flex-col gap-4">
-	<!-- If countdown has alr started -->
-	<!-- {#if COUNTDOWN > countdown} -->
-	<p class="text-3xl text-primary">{Math.floor(countdown / 1000)}</p>
-	<!-- {/if} -->
+	<!-- Countdown -->
+	<p
+		class={clsx(
+			'text-3xl text-primary',
+			// Hide countdown if countdown hasn't started
+			COUNTDOWN == countdown && 'opacity-0'
+		)}
+	>
+		{Math.ceil(countdown / 1000)}
+	</p>
+	<!-- Word "paragraph" -->
 	<div
 		bind:this={words}
 		class="relative flex max-w-prose flex-wrap gap-x-[1ch] gap-y-[0.4ch] text-3xl"
