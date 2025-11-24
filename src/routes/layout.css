@@ -20,17 +20,26 @@ body {
 	height: 100%;
 }
 
-.letter {
-	@apply leading-relaxed opacity-40;
+.word.incorrect {
+	@apply border-b-2 border-destructive/80;
 }
-.correct-letter {
+
+/* style letters that have no state */
+.word.incorrect > .letter:not(.correct):not(.incorrect):not(.wrong) {
+	@apply text-shadow-destructive/80 text-shadow-sm;
+}
+
+.letter {
+	@apply leading-0 opacity-40;
+}
+.letter.correct {
 	opacity: 1;
 }
-.incorrect-letter {
+.letter.incorrect {
 	opacity: 1;
 	color: var(--color-destructive);
 }
-.wrong-letter {
+.letter.wrong {
 	opacity: 0.4;
 	color: var(--color-destructive);
 }

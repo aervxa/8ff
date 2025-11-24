@@ -36,10 +36,12 @@
 		tick().then(() => {
 			// generate (new) words in wordList
 			wordList = generate({ exactly: 99, minLength: 1, maxLength: 7 });
-		});
 
-		// Update caret to positioning
-		updateCaret();
+			// Update caret to positioning after updating DOM once again
+			tick().then(() => {
+				updateCaret();
+			});
+		});
 	};
 
 	const countdownTick = () => {
@@ -69,11 +71,13 @@
 	};
 
 	const updateCaret = () => {
-		const word = words.querySelector(`[data-word="${wordTrack.toString()}"]`);
+		const word = words.querySelector(`.word[data-word="${wordTrack.toString()}"]`);
 		if (word) {
 			const wordsRect = words.getBoundingClientRect();
 			// caret's position is AFTER PREV letter
-			const prevLetter = word.querySelector(`[data-letter="${(letterTrack - 1).toString()}"]`);
+			const prevLetter = word.querySelector(
+				`.letter[data-letter="${(letterTrack - 1).toString()}"]`
+			);
 			// If prevLetter
 			if (prevLetter) {
 				const rect = prevLetter.getBoundingClientRect();
@@ -92,9 +96,9 @@
 
 	const keyListener = (e: KeyboardEvent) => {
 		// Select word and letter
-		const word = words.querySelector(`[data-word="${wordTrack.toString()}"]`);
+		const word = words.querySelector(`.word[data-word="${wordTrack.toString()}"]`);
 		if (word) {
-			const letter = word.querySelector(`[data-letter="${letterTrack.toString()}"]`);
+			const letter = word.querySelector(`.letter[data-letter="${letterTrack.toString()}"]`);
 
 			// To cancel or restart
 			if (e.key == 'Escape') {
@@ -106,28 +110,53 @@
 				e.preventDefault();
 				// Remove letters
 				//  letter.previousElementSibling is cleaner, but doesn't work on the last index
-				const prevLetter = word.querySelector(`[data-letter="${(letterTrack - 1).toString()}"]`);
+				const prevLetter = word.querySelector(
+					`.letter[data-letter="${(letterTrack - 1).toString()}"]`
+				);
 
 				if (prevLetter) {
 					// Delete if wrong letter (extra wrong letters)
-					if (prevLetter.classList.contains('wrong-letter')) {
+					if (prevLetter.classList.contains('wrong')) {
 						prevLetter.remove();
 					}
 					// Remove class if exists
-					else if (prevLetter.classList.contains('incorrect-letter')) {
-						prevLetter.classList.remove('incorrect-letter');
-					} else if (prevLetter.classList.contains('correct-letter')) {
-						prevLetter.classList.remove('correct-letter');
+					else if (prevLetter.classList.contains('incorrect')) {
+						prevLetter.classList.remove('incorrect');
+					} else if (prevLetter.classList.contains('correct')) {
+						prevLetter.classList.remove('correct');
 					}
 					// Decrement letter index tracking
 					letterTrack--;
 				}
 				// user is on the first index (0), go to previous word's last index
 				else {
-					const prevWord = words.querySelector(`[data-word="${(wordTrack - 1).toString()}"]`);
+					const prevWord = words.querySelector(`.word[data-word="${(wordTrack - 1).toString()}"]`);
 					if (prevWord) {
-						wordTrack--; // decrement word index
-						letterTrack = prevWord.children.length; // set letter index to last letter of prevWord
+						// Remove incorrect state
+						if (prevWord.classList.contains('incorrect')) {
+							prevWord.classList.remove('incorrect');
+						}
+
+						// decrement word index
+						wordTrack--;
+
+						const letters = prevWord.querySelectorAll('.letter');
+						let letterPos = 0;
+						// Get letter position (letters with states)
+						for (const [index, letter] of letters.entries()) {
+							// If letter doesn't contain any state, that's the position to jump the user back to
+							if (
+								!letter.classList.contains('incorrect') &&
+								!letter.classList.contains('correct') &&
+								!letter.classList.contains('wrong')
+							) {
+								letterPos = index;
+								break;
+							}
+						}
+
+						// set letter index, fallback to last letter if letterPos isn't set (everything has a state)
+						letterTrack = letterPos || prevWord.children.length;
 					}
 				}
 				updateCaret();
@@ -163,15 +192,15 @@
 				if (letter) {
 					// If letter matches
 					if (e.key == letter.innerHTML) {
-						letter.classList.add('correct-letter');
+						letter.classList.add('correct');
 					} else {
-						letter.classList.add('incorrect-letter');
+						letter.classList.add('incorrect');
 					}
 				}
 				// Create a new letter and append to word
 				else {
 					const newLetter = document.createElement('span');
-					newLetter.classList.add('letter', 'wrong-letter');
+					newLetter.classList.add('letter', 'wrong');
 					newLetter.dataset.letter = letterTrack.toString();
 					newLetter.innerHTML = e.key;
 					word.appendChild(newLetter);
@@ -182,6 +211,16 @@
 			}
 			// Let user skip work with 'Space' after typing atleast one character
 			else if (letterTrack > 0) {
+				// If word is not completed
+				if (letterTrack < wordList[wordTrack].length) {
+					word.classList.add('incorrect');
+				}
+				// If word contains a wrong state
+				else if (word.querySelectorAll('.letter.wrong, .letter.incorrect').length > 0) {
+					// make word state wrong
+					word.classList.add('incorrect');
+				}
+
 				wordTrack++;
 				letterTrack = 0;
 				updateCaret();
@@ -207,13 +246,16 @@
 	<!-- {#if COUNTDOWN > countdown} -->
 	<p class="text-3xl text-primary">{Math.floor(countdown / 1000)}</p>
 	<!-- {/if} -->
-	<div bind:this={words} class="relative flex max-w-prose flex-wrap gap-x-[1ch] text-3xl">
+	<div
+		bind:this={words}
+		class="relative flex max-w-prose flex-wrap gap-x-[1ch] gap-y-[0.4ch] text-3xl"
+	>
 		<span
 			bind:this={caret}
 			class="absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary"
 		></span>
 		{#each wordList as word, index}
-			<span data-word={index}>
+			<span data-word={index} class="word">
 				{#each word as letter, index}
 					<span data-letter={index} class="letter">
 						{letter}
