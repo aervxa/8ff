@@ -26,7 +26,7 @@
 
 	const tick = () => {
 		const now = Date.now();
-		countdown -= now - lastTime;
+		countdown -= now - lastTime; // delta
 		lastTime = now;
 
 		// If remaining time in countdown, continue ticking
@@ -34,7 +34,7 @@
 			animationFrame = requestAnimationFrame(tick);
 		} else {
 			countdown = 0;
-			endCountdown();
+			stopCountdown();
 		}
 	};
 
@@ -45,7 +45,7 @@
 		animationFrame = requestAnimationFrame(tick);
 	};
 
-	const endCountdown = () => {
+	const stopCountdown = () => {
 		// End countdown
 		cancelAnimationFrame(animationFrame);
 	};
