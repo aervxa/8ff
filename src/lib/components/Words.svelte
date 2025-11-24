@@ -153,11 +153,13 @@
 			// prevent default behavior if valid key is pressed
 			e.preventDefault();
 
-			// Start countdown
-			startCountdown();
-
 			// If key press is a letter
 			if (allowedChars.trim().includes(e.key)) {
+				// Start countdown (countdown only starts from allowedChars excluding spaces)
+				if (countdown == COUNTDOWN) {
+					startCountdown();
+				}
+
 				// if letter index is 14 (max length of possible words is 13)
 				if (letterTrack == 14) {
 					return;
