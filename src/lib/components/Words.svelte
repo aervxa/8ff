@@ -180,8 +180,8 @@
 				letterTrack++; // increment letter index track
 				updateCaret();
 			}
-			// If word is over (if letter index is equal to word length, the word is over)
-			else if (letterTrack >= wordList[wordTrack].length) {
+			// Let user skip work with 'Space' after typing atleast one character
+			else if (letterTrack > 0) {
 				wordTrack++;
 				letterTrack = 0;
 				updateCaret();
