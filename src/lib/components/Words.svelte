@@ -28,6 +28,12 @@
 	let totalKeyPresses = 0;
 	let correctKeyPresses = 0;
 
+	const endTest = () => {
+		// log results
+		console.log(correctWordLetters, totalKeyPresses, correctKeyPresses);
+		// TODO: Pass results onto parent comp
+	};
+
 	const generateWords = () => {
 		// empty wordList to remove UI states
 		wordList = [];
@@ -75,8 +81,10 @@
 		// End/pause countdown
 		cancelAnimationFrame(animationFrame);
 
-		// log results
-		console.log(correctWordLetters, totalKeyPresses, correctKeyPresses);
+		// End test if countdown is over
+		if (countdown <= 0) {
+			endTest();
+		}
 	};
 
 	const updateCaret = () => {
@@ -272,10 +280,14 @@
 				correctKeyPresses++;
 			}
 		}
-		// Remove listener once wordList is completed
+		// wordList is completed
 		else {
+			// remove listener
 			window.removeEventListener('keydown', keyListener);
-			// TODO: complete wordList action (let user know score n likes)
+			// Stop countdown
+			stopCountdown();
+			// End test
+			endTest();
 		}
 	};
 
