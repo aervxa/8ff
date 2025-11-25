@@ -6,6 +6,7 @@
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
 	import clsx from 'clsx';
 	import { getLine } from '$lib/punchLines';
+	import { fade } from 'svelte/transition';
 
 	const { results, playAgain }: { results: TypingResults; playAgain: () => void } = $props();
 
@@ -20,7 +21,7 @@
 	});
 </script>
 
-<div class="flex flex-col items-center gap-6">
+<div in:fade class="flex flex-col items-center gap-6">
 	<p
 		class={clsx(face == '^^' && 'opacity-0', 'text-5xl leading-relaxed font-semibold text-primary')}
 	>

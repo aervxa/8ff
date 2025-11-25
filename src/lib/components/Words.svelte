@@ -5,6 +5,7 @@
 	import { onMount, tick } from 'svelte';
 	import { Button } from './ui/button';
 	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+	import { fly } from 'svelte/transition';
 
 	const COUNTDOWN = 5 * 1000; // 30 seconds
 	const VISIBLE_LINES = 3;
@@ -335,7 +336,7 @@
 	});
 </script>
 
-<div class="flex flex-col gap-4">
+<div in:fly={{ y: 64 }} class="flex flex-col gap-4">
 	<!-- Countdown -->
 	<p
 		class={clsx(
