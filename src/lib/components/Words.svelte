@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { TypingResults } from '$lib/utils';
 	import clsx from 'clsx';
 	import { generate } from 'random-words';
 	import { onMount, tick } from 'svelte';
@@ -10,7 +11,7 @@
 	const {
 		onComplete
 	}: {
-		onComplete: (results: { wpm: number; rwpm: number; acc: number; rawpm: number }) => void;
+		onComplete: (results: TypingResults) => void;
 	} = $props();
 
 	let wordList: string | string[] = $state([]);
