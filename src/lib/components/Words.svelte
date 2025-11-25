@@ -3,6 +3,8 @@
 	import clsx from 'clsx';
 	import { generate } from 'random-words';
 	import { onMount, tick } from 'svelte';
+	import { Button } from './ui/button';
+	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
 	const COUNTDOWN = 5 * 1000; // 30 seconds
 	const VISIBLE_LINES = 3;
@@ -363,4 +365,15 @@
 			{/each}
 		</div>
 	</div>
+	<!-- Restart button -->
+	<Button
+		class="mt-2 self-center"
+		variant="ghost"
+		onclick={() => {
+			generateWords();
+		}}
+	>
+		<RotateCcw />
+		Restart
+	</Button>
 </div>
