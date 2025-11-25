@@ -20,6 +20,10 @@ body {
 	height: 100%;
 }
 
+button {
+	@apply cursor-pointer;
+}
+
 .word.incorrect {
 	@apply shadow-[inset_0_-2px_0_0] shadow-destructive/80;
 }
@@ -34,7 +38,7 @@ body {
 }
 
 .word {
-  @apply py-[0.2ch]
+	@apply py-[0.2ch];
 }
 .letter {
 	@apply leading-tight brightness-50;
