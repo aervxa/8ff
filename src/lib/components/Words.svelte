@@ -23,6 +23,11 @@
 	let lastTime = 0;
 	let animationFrame = 0;
 
+	// result tracking
+	let correctWordLetters = 0;
+	let totalKeyPresses = 0;
+	let correctKeyPresses = 0;
+
 	const generateWords = () => {
 		// empty wordList to remove UI states
 		wordList = [];
@@ -69,6 +74,9 @@
 	const stopCountdown = () => {
 		// End/pause countdown
 		cancelAnimationFrame(animationFrame);
+
+		// log results
+		console.log(correctWordLetters, totalKeyPresses, correctKeyPresses);
 	};
 
 	const updateCaret = () => {
@@ -200,6 +208,9 @@
 			// prevent default behavior if valid key is pressed
 			e.preventDefault();
 
+			// increment tracking var
+			totalKeyPresses++;
+
 			// If key press is a letter
 			if (allowedChars.trim().includes(e.key)) {
 				// Start countdown (countdown only starts from allowedChars excluding spaces)
@@ -217,6 +228,8 @@
 					// If letter matches
 					if (e.key == letter.innerHTML) {
 						letter.classList.add('correct');
+						// incrememnt tracking var
+						correctKeyPresses++;
 					} else {
 						letter.classList.add('incorrect');
 					}
@@ -244,10 +257,19 @@
 					// make word state wrong
 					word.classList.add('incorrect');
 				}
+				// If word does not cintain any wrong states
+				else {
+					// Increment length of correct letters into correctWordLetters
+					const letters = word.querySelectorAll('.letter.correct');
+					correctWordLetters += letters.length;
+				}
 
 				wordTrack++;
 				letterTrack = 0;
 				updateCaret();
+
+				// incrememnt tracking var
+				correctKeyPresses++;
 			}
 		}
 		// Remove listener once wordList is completed
