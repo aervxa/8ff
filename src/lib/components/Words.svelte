@@ -121,7 +121,7 @@
 			}
 
 			// set letter index, fallback to last letter if letterPos isn't set (everything has a state)
-			letterTrack = letterPos || wordList[wordTrack].length;
+			letterTrack = letterPos || letters.length;
 		}
 	};
 
