@@ -10,7 +10,7 @@
 	const {
 		onComplete
 	}: {
-		onComplete: (data: { start: Date; end: Date }) => void;
+		onComplete: (results: { wpm: number; rwpm: number; acc: number; rawpm: number }) => void;
 	} = $props();
 
 	let wordList: string | string[] = $state([]);
@@ -33,9 +33,14 @@
 	let correctKeyPresses = 0;
 
 	const endTest = () => {
-		// log results
-		console.log(correctWordLetters, totalKeyPresses, correctKeyPresses);
-		// TODO: Pass results onto parent comp
+		// Get results
+		const wpm = Math.round(((correctWordLetters + wordTrack) / 5) * COUNTDOWN);
+		const rwpm = Math.round((totalKeyPresses / 5) * COUNTDOWN);
+		const acc = Math.round((correctKeyPresses / totalKeyPresses) * 100);
+		const rawpm = Math.round(rwpm * acc);
+
+		// Pass results onto parent comp
+		onComplete({ wpm, rwpm, acc, rawpm });
 	};
 
 	const appendWords = (exactly = MAXIMUM_WORDS_PER_LINE * VISIBLE_LINES) => {
