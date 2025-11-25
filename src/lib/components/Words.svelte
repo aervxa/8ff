@@ -98,6 +98,11 @@
 	const gotoPrevWord = () => {
 		const prevWord = words.querySelector(`.word[data-word="${(wordTrack - 1).toString()}"]`);
 		if (prevWord) {
+			// Prevent going back to a word that's already correct
+			if (!prevWord.classList.contains('incorrect')) {
+				return;
+			}
+
 			// Remove incorrect state
 			if (prevWord.classList.contains('incorrect')) {
 				prevWord.classList.remove('incorrect');
