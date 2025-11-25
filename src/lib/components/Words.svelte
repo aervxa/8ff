@@ -3,6 +3,10 @@
 	import { generate } from 'random-words';
 	import { onMount, tick } from 'svelte';
 
+	const COUNTDOWN = 5 * 1000; // 30 seconds
+	const VISIBLE_LINES = 3;
+	const MAXIMUM_WORDS_PER_LINE = 12; // generates ~1.1 lines.
+
 	const {
 		onComplete
 	}: {
@@ -14,11 +18,11 @@
 	// words
 	let wordTrack = 0;
 	let letterTrack = 0;
+	let wordsWrapper: HTMLDivElement;
 	let words: HTMLDivElement;
 	let caret: HTMLSpanElement;
 
 	// countdown
-	const COUNTDOWN = 5 * 1000; // 30 seconds
 	let countdown = $state(COUNTDOWN);
 	let lastTime = 0;
 	let animationFrame = 0;
@@ -34,25 +38,31 @@
 		// TODO: Pass results onto parent comp
 	};
 
-	const generateWords = () => {
-		// empty wordList to remove UI states
-		wordList = [];
-		// reset word index tracks
-		wordTrack = 0;
-		letterTrack = 0;
-		// Reset countdown
-		stopCountdown();
-		countdown = COUNTDOWN;
+	const appendWords = (exactly = MAXIMUM_WORDS_PER_LINE * VISIBLE_LINES) => {
+		wordList = [...wordList, ...generate({ exactly, minLength: 1, maxLength: 7 })];
+	};
 
-		// Skip tick (will run after DOM updates according to empty wordList)
+	const generateWords = async () => {
+		if (wordList.length > 0) {
+			// empty wordList to remove UI states
+			wordList = [];
+			// reset word index tracks
+			wordTrack = 0;
+			letterTrack = 0;
+			// Reset countdown
+			stopCountdown();
+			countdown = COUNTDOWN;
+
+			// Skip tick (will run after DOM updates according to empty wordList)
+			await tick();
+		}
+
+		// generate (new) words in wordList
+		appendWords();
+
+		// Update caret to positioning after updating DOM once again
 		tick().then(() => {
-			// generate (new) words in wordList
-			wordList = generate({ exactly: 99, minLength: 1, maxLength: 7 });
-
-			// Update caret to positioning after updating DOM once again
-			tick().then(() => {
-				updateCaret();
-			});
+			updateCaret();
 		});
 	};
 
@@ -104,6 +114,21 @@
 				const rect = word.getBoundingClientRect();
 				caret.style.top = rect.y - wordsRect.y + 'px';
 				caret.style.left = rect.x - wordsRect.x + 'px';
+			}
+
+			// Calculate distance of word from wrapper to align words
+			const wordRect = word.getBoundingClientRect();
+			const wordsWrapperRect = wordsWrapper.getBoundingClientRect();
+			const distanceFromWrapper = wordRect.y - wordsWrapperRect.y;
+			// If word is on the thrid line (second line would make distance closely EQUAL to height)
+			if (distanceFromWrapper > word.clientHeight) {
+				// Get how much words is alr translated
+				const delta = wordsWrapperRect.y - wordsRect.y;
+				// Translate words up by height of a word (next line effect)
+				words.style.translate = `0 -${Math.round(delta + word.clientHeight)}px`;
+
+				// append more words
+				appendWords(MAXIMUM_WORDS_PER_LINE);
 			}
 		} else {
 			// Remove caret when no words (after reaching end of wordlist)
@@ -280,15 +305,6 @@
 				correctKeyPresses++;
 			}
 		}
-		// wordList is completed
-		else {
-			// remove listener
-			window.removeEventListener('keydown', keyListener);
-			// Stop countdown
-			stopCountdown();
-			// End test
-			endTest();
-		}
 	};
 
 	onMount(() => {
@@ -296,6 +312,17 @@
 		generateWords();
 		// Add listener for user input
 		window.addEventListener('keydown', keyListener);
+
+		// Wait till DOM update word generation
+		tick().then(() => {
+			// Set fixed height of wordsWrapper to 3 times the height of a word (for 3 lines)
+			console.log(words.querySelector('.word'));
+			wordsWrapper.style.height = (words.querySelector('.word')?.clientHeight || 1) * 3 + 'px';
+		});
+
+		return () => {
+			window.removeEventListener('keydown', keyListener);
+		};
 	});
 </script>
 
@@ -310,23 +337,23 @@
 	>
 		{Math.ceil(countdown / 1000)}
 	</p>
-	<!-- Word "paragraph" -->
-	<div
-		bind:this={words}
-		class="relative flex max-w-prose flex-wrap gap-x-[1ch] gap-y-[0.4ch] text-3xl"
-	>
-		<span
-			bind:this={caret}
-			class="absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary"
-		></span>
-		{#each wordList as word, index}
-			<span data-word={index} class="word">
-				{#each word as letter, index}
-					<span data-letter={index} class="letter">
-						{letter}
-					</span>
-				{/each}
-			</span>
-		{/each}
+	<!-- Words wrapper -->
+	<div bind:this={wordsWrapper} class="overflow-y-clip text-3xl">
+		<!-- Word "paragraph" -->
+		<div bind:this={words} class="relative flex max-w-prose flex-wrap gap-x-[1ch] text-3xl">
+			<span
+				bind:this={caret}
+				class="absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary"
+			></span>
+			{#each wordList as word, index}
+				<span data-word={index} class="word">
+					{#each word as letter, index}
+						<span data-letter={index} class="letter">
+							{letter}
+						</span>
+					{/each}
+				</span>
+			{/each}
+		</div>
 	</div>
 </div>

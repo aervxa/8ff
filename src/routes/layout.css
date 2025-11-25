@@ -33,6 +33,9 @@ body {
 	@apply text-shadow-destructive/80;
 }
 
+.word {
+  @apply py-[0.2ch]
+}
 .letter {
 	@apply leading-tight brightness-50;
 }
