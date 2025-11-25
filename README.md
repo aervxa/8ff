@@ -119,3 +119,7 @@ The UI of the results run in an `{#if results}`, such that when `results` are av
 ## Testing (😅)
 
 Participate in the typing test until the countdown runs down and see your results. Click "Try again" to participate again.
+
+#
+
+Built for Harvard's CS50 final project.
