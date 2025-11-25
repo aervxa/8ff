@@ -34,11 +34,13 @@
 	let correctKeyPresses = 0;
 
 	const endTest = () => {
+		// Get elapsed tiem in minutes
+		const elapsed = COUNTDOWN / 1000 / 60; // COUNTDOWN is in ms;
 		// Get results
-		const wpm = Math.round(((correctWordLetters + wordTrack) / 5) * COUNTDOWN);
-		const rwpm = Math.round((totalKeyPresses / 5) * COUNTDOWN);
+		const wpm = Math.round((correctWordLetters + wordTrack) / 5 / elapsed);
+		const rwpm = Math.round(totalKeyPresses / 5 / elapsed);
 		const acc = Math.round((correctKeyPresses / totalKeyPresses) * 100);
-		const rawpm = Math.round(rwpm * acc);
+		const rawpm = Math.round(rwpm * (acc / 100));
 
 		// Pass results onto parent comp
 		onComplete({ wpm, rwpm, acc, rawpm });
@@ -322,7 +324,6 @@
 		// Wait till DOM update word generation
 		tick().then(() => {
 			// Set fixed height of wordsWrapper to 3 times the height of a word (for 3 lines)
-			console.log(words.querySelector('.word'));
 			wordsWrapper.style.height = (words.querySelector('.word')?.clientHeight || 1) * 3 + 'px';
 		});
 
