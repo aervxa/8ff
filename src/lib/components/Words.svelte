@@ -95,6 +95,61 @@
 		}
 	};
 
+	const gotoPrevWord = () => {
+		const prevWord = words.querySelector(`.word[data-word="${(wordTrack - 1).toString()}"]`);
+		if (prevWord) {
+			// Remove incorrect state
+			if (prevWord.classList.contains('incorrect')) {
+				prevWord.classList.remove('incorrect');
+			}
+			// decrement word index
+			wordTrack--;
+
+			const letters = prevWord.querySelectorAll('.letter');
+			let letterPos = 0;
+			// Get letter position (letters with states)
+			for (const [index, letter] of letters.entries()) {
+				// If letter doesn't contain any state, that's the position to jump the user back to
+				if (
+					!letter.classList.contains('incorrect') &&
+					!letter.classList.contains('correct') &&
+					!letter.classList.contains('wrong')
+				) {
+					letterPos = index;
+					break;
+				}
+			}
+
+			// set letter index, fallback to last letter if letterPos isn't set (everything has a state)
+			letterTrack = letterPos || wordList[wordTrack].length;
+		}
+	};
+
+	const removeLetter = (index: number) => {
+		const word = words.querySelector(`.word[data-word="${wordTrack.toString()}"]`);
+		if (word) {
+			const prevLetter = word.querySelector(`.letter[data-letter="${index.toString()}"]`);
+			if (prevLetter) {
+				// Delete if wrong letter (extra wrong letters)
+				if (prevLetter.classList.contains('wrong')) {
+					prevLetter.remove();
+				}
+				// Remove class if exists
+				else if (prevLetter.classList.contains('incorrect')) {
+					prevLetter.classList.remove('incorrect');
+				} else if (prevLetter.classList.contains('correct')) {
+					prevLetter.classList.remove('correct');
+				}
+				// Decrement letter index tracking
+				letterTrack--;
+			}
+			// user is on the first index (0), go to previous word's last index
+			else {
+				gotoPrevWord();
+			}
+		}
+	};
+
 	const keyListener = (e: KeyboardEvent) => {
 		// Select word and letter
 		const word = words.querySelector(`.word[data-word="${wordTrack.toString()}"]`);
@@ -106,60 +161,23 @@
 				generateWords();
 			}
 
-			// For removing input
+			// For removing letter
 			if (e.key == 'Backspace') {
 				e.preventDefault();
-				// Remove letters
-				//  letter.previousElementSibling is cleaner, but doesn't work on the last index
-				const prevLetter = word.querySelector(
-					`.letter[data-letter="${(letterTrack - 1).toString()}"]`
-				);
-
-				if (prevLetter) {
-					// Delete if wrong letter (extra wrong letters)
-					if (prevLetter.classList.contains('wrong')) {
-						prevLetter.remove();
+				if (e.ctrlKey || e.altKey) {
+					if (letterTrack == 0) {
+						// Jump to previous word if the current word hasn't been started yet
+						gotoPrevWord();
 					}
-					// Remove class if exists
-					else if (prevLetter.classList.contains('incorrect')) {
-						prevLetter.classList.remove('incorrect');
-					} else if (prevLetter.classList.contains('correct')) {
-						prevLetter.classList.remove('correct');
+					// Loop through each letter and remove them
+					for (let i = letterTrack - 1; i >= 0; i--) {
+						removeLetter(i);
 					}
-					// Decrement letter index tracking
-					letterTrack--;
+				} else {
+					// Remove letter
+					removeLetter(letterTrack - 1);
 				}
-				// user is on the first index (0), go to previous word's last index
-				else {
-					const prevWord = words.querySelector(`.word[data-word="${(wordTrack - 1).toString()}"]`);
-					if (prevWord) {
-						// Remove incorrect state
-						if (prevWord.classList.contains('incorrect')) {
-							prevWord.classList.remove('incorrect');
-						}
 
-						// decrement word index
-						wordTrack--;
-
-						const letters = prevWord.querySelectorAll('.letter');
-						let letterPos = 0;
-						// Get letter position (letters with states)
-						for (const [index, letter] of letters.entries()) {
-							// If letter doesn't contain any state, that's the position to jump the user back to
-							if (
-								!letter.classList.contains('incorrect') &&
-								!letter.classList.contains('correct') &&
-								!letter.classList.contains('wrong')
-							) {
-								letterPos = index;
-								break;
-							}
-						}
-
-						// set letter index, fallback to last letter if letterPos isn't set (everything has a state)
-						letterTrack = letterPos || prevWord.children.length;
-					}
-				}
 				updateCaret();
 			}
 
