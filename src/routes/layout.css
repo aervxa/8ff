@@ -21,7 +21,7 @@ body {
 }
 
 button {
-	@apply cursor-pointer;
+	@apply cursor-pointer font-semibold opacity-90;
 }
 
 .word.incorrect {

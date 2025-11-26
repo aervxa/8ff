@@ -336,7 +336,7 @@
 	});
 </script>
 
-<div in:fly={{ y: 64 }} class="flex flex-col gap-4">
+<div in:fly={{ y: 64 }} class="mt-32 mb-64 flex flex-col gap-4">
 	<!-- Countdown -->
 	<p
 		class={clsx(
@@ -348,9 +348,9 @@
 		{Math.ceil(countdown / 1000)}
 	</p>
 	<!-- Words wrapper -->
-	<div bind:this={wordsWrapper} class="overflow-y-clip text-3xl">
+	<div bind:this={wordsWrapper} class="max-w-prose overflow-y-clip text-3xl font-medium">
 		<!-- Word "paragraph" -->
-		<div bind:this={words} class="relative flex max-w-prose flex-wrap gap-x-[1ch] text-3xl">
+		<div bind:this={words} class="relative flex flex-wrap gap-x-[1ch] max-sm:justify-center">
 			<span
 				bind:this={caret}
 				class="absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary"

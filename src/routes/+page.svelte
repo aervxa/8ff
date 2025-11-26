@@ -6,9 +6,7 @@
 	let results: TypingResults | null = $state(null);
 </script>
 
-<main
-	class="flex h-full w-full flex-col items-center-safe justify-center-safe bg-background pt-16 pb-64 font-mono font-medium"
->
+<main class="flex h-full w-full flex-col items-center-safe justify-center-safe bg-background">
 	{#if results}
 		<Result
 			{results}

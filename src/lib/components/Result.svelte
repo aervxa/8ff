@@ -21,7 +21,7 @@
 	});
 </script>
 
-<div in:fade class="flex flex-col items-center gap-6">
+<div in:fade class="mt-24 mb-48 flex flex-col items-center gap-6">
 	<p
 		class={clsx(face == '^^' && 'opacity-0', 'text-5xl leading-relaxed font-semibold text-primary')}
 	>
