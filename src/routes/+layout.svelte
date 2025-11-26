@@ -31,7 +31,7 @@
 
 	<footer class="mt-auto flex justify-between border-t px-6 py-4 text-sm select-none">
 		<p class="font-light tracking-wide opacity-80">
-			Built by <a href="https://www.github.com/aervxa" class="font-medium text-primary underline"
+			Built by <a href="https://www.github.com/aervxa" target="_blank" class="font-medium text-primary underline"
 				>@aervxa</a
 			>
 		</p>
