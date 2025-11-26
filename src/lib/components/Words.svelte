@@ -347,7 +347,7 @@
 	});
 </script>
 
-<div in:fly={{ y: 64 }} class="mt-32 mb-64 flex flex-col gap-4 select-none">
+<div in:fly={{ y: 64 }} class="mt-12 mb-48 flex flex-col gap-4 select-none">
 	<!-- Countdown -->
 	<p
 		class={clsx(
@@ -389,7 +389,7 @@
 		</div>
 		<!-- No focus warning -->
 		<div
-			class="pointer-events-none absolute -inset-x-2 inset-y-0 z-100 flex items-center-safe justify-center-safe gap-4 backdrop-blur-sm delay-1000 duration-300 peer-focus:opacity-0 peer-focus:delay-0"
+			class="pointer-events-none absolute -inset-x-2 inset-y-0 z-10 flex items-center-safe justify-center-safe gap-4 backdrop-blur-sm delay-1000 duration-300 peer-focus:opacity-0 peer-focus:delay-0"
 		>
 			<Mouse />
 			<p class="text-lg">Click here or press any key to focus</p>
