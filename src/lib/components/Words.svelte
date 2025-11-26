@@ -5,6 +5,7 @@
 	import { onMount, tick } from 'svelte';
 	import { Button } from './ui/button';
 	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+	import Mouse from '@lucide/svelte/icons/mouse';
 	import { fly } from 'svelte/transition';
 
 	const COUNTDOWN = 5 * 1000; // 30 seconds
@@ -24,6 +25,7 @@
 	let letterTrack = 0;
 	let wordsWrapper: HTMLDivElement;
 	let words: HTMLDivElement;
+	let isWordsFocused = $state(false);
 	let caret: HTMLSpanElement;
 
 	// countdown
@@ -75,6 +77,9 @@
 		tick().then(() => {
 			updateCaret();
 		});
+
+		// Focus on words elm
+		words.focus();
 	};
 
 	const countdownTick = () => {
@@ -208,15 +213,22 @@
 	};
 
 	const keyListener = (e: KeyboardEvent) => {
+		const allowedChars = 'AabbCcDdeeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ';
+
+		// Check if words list is not focused
+		if (!isWordsFocused) {
+			// If valid char is pressed, focus on the word (we don't want any key to focus back)
+			// remove " " to let user press buttons with Space when not focused
+			if (allowedChars.slice(0, -1).includes(e.key)) {
+				words.focus();
+			}
+			return;
+		}
+
 		// Select word and letter
 		const word = words.querySelector(`.word[data-word="${wordTrack.toString()}"]`);
 		if (word) {
 			const letter = word.querySelector(`.letter[data-letter="${letterTrack.toString()}"]`);
-
-			// To cancel or restart
-			if (e.key == 'Escape') {
-				generateWords();
-			}
 
 			// For removing letter
 			if (e.key == 'Backspace') {
@@ -238,12 +250,11 @@
 				updateCaret();
 			}
 
-			// Cancel if any modifier key is being pressed (SHIFT included since all words are lowercase)
-			if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+			// Cancel if any system/app modifier key is being pressed
+			if (e.ctrlKey || e.altKey || e.metaKey) {
 				return;
 			}
 
-			const allowedChars = 'abcdefghijklmnopqrstuvwxyz ';
 			// Ignore if chars are not allowed
 			if (!allowedChars.includes(e.key)) {
 				return;
@@ -336,7 +347,7 @@
 	});
 </script>
 
-<div in:fly={{ y: 64 }} class="mt-32 mb-64 flex flex-col gap-4">
+<div in:fly={{ y: 64 }} class="mt-32 mb-64 flex flex-col gap-4 select-none">
 	<!-- Countdown -->
 	<p
 		class={clsx(
@@ -348,12 +359,23 @@
 		{Math.ceil(countdown / 1000)}
 	</p>
 	<!-- Words wrapper -->
-	<div bind:this={wordsWrapper} class="max-w-prose overflow-y-clip text-3xl font-medium">
+	<div bind:this={wordsWrapper} class="relative max-w-prose overflow-y-clip text-3xl font-medium">
 		<!-- Word "paragraph" -->
-		<div bind:this={words} class="relative flex flex-wrap gap-x-[1ch] max-sm:justify-center">
+		<div
+			bind:this={words}
+			class="peer group relative z-0 flex flex-wrap gap-x-[1ch] outline-none max-sm:justify-center"
+			tabindex="0"
+			role="listbox"
+			onfocus={() => {
+				isWordsFocused = true;
+			}}
+			onblur={() => {
+				isWordsFocused = false;
+			}}
+		>
 			<span
 				bind:this={caret}
-				class="absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary"
+				class="pointer-events-none invisible absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary group-focus:visible"
 			></span>
 			{#each wordList as word, index}
 				<span data-word={index} class="word">
@@ -364,6 +386,13 @@
 					{/each}
 				</span>
 			{/each}
+		</div>
+		<!-- No focus warning -->
+		<div
+			class="pointer-events-none absolute -inset-x-2 inset-y-0 z-100 flex items-center-safe justify-center-safe gap-4 backdrop-blur-sm delay-1000 duration-300 peer-focus:opacity-0 peer-focus:delay-0"
+		>
+			<Mouse />
+			<p class="text-lg">Click here or press any key to focus</p>
 		</div>
 	</div>
 	<!-- Restart button -->
