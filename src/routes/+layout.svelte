@@ -29,9 +29,11 @@
 
 	{@render children()}
 
-	<footer class="mt-auto flex justify-between border-t px-6 py-4 select-none text-sm">
+	<footer class="mt-auto flex justify-between border-t px-6 py-4 text-sm select-none">
 		<p class="font-light tracking-wide opacity-80">
-			Built by <span class="font-medium text-primary">@aervxa</span>
+			Built by <a href="https://www.github.com/aervxa" class="font-medium text-primary underline"
+				>@aervxa</a
+			>
 		</p>
 		<p class="font-extralight tracking-wide opacity-60">CS50x 2025</p>
 	</footer>
