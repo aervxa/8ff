@@ -7,6 +7,8 @@
 	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 	import Mouse from '@lucide/svelte/icons/mouse';
 	import { fly } from 'svelte/transition';
+	import * as Alert from './ui/alert';
+	import Lock from '@lucide/svelte/icons/lock';
 
 	const COUNTDOWN = 5 * 1000; // 30 seconds
 	const VISIBLE_LINES = 3;
@@ -17,6 +19,9 @@
 	}: {
 		onComplete: (results: TypingResults) => void;
 	} = $props();
+
+	let capsLock = $state(false);
+	let capsLockTimeout = 0; // timeout to auto remove alert
 
 	let wordList: string | string[] = $state([]);
 
@@ -263,6 +268,16 @@
 			// prevent default behavior if valid key is pressed
 			e.preventDefault();
 
+			// Check if caps lock is turned on and show the warning
+			const capsLockState = e.getModifierState('CapsLock');
+			if (capsLockState == true) {
+				clearTimeout(capsLockTimeout);
+				capsLock = capsLockState;
+				capsLockTimeout = setTimeout(() => {
+					capsLock = false;
+				}, 2000);
+			}
+
 			// increment tracking var
 			totalKeyPresses++;
 
@@ -347,17 +362,30 @@
 	});
 </script>
 
-<div in:fly={{ y: 64 }} class="mt-12 mb-48 flex flex-col gap-4 select-none">
-	<!-- Countdown -->
-	<p
-		class={clsx(
-			'text-3xl text-primary',
-			// Hide countdown if countdown hasn't started
-			COUNTDOWN == countdown && 'opacity-0'
-		)}
-	>
-		{Math.ceil(countdown / 1000)}
-	</p>
+<div in:fly={{ y: 64 }} class="mt-16 mb-48 flex flex-col gap-4 select-none">
+	<!-- "Header" -->
+	<div class="relative">
+		<!-- Countdown -->
+		<p
+			class={clsx(
+				'text-3xl text-primary',
+				// Hide countdown if countdown hasn't started
+				COUNTDOWN == countdown && 'opacity-0'
+			)}
+		>
+			{Math.ceil(countdown / 1000)}
+		</p>
+		<!-- Caps lock warning -->
+		{#if capsLock}
+			<div transition:fly={{ y: -20 }} class="absolute bottom-0 left-1/2 -translate-x-1/2">
+				<Alert.Root variant="destructive">
+					<Lock />
+					<Alert.Title>Caps Lock is on!</Alert.Title>
+					<!-- <Alert.Description>You can add components to your app using the cli.</Alert.Description> -->
+				</Alert.Root>
+			</div>
+		{/if}
+	</div>
 	<!-- Words wrapper -->
 	<div bind:this={wordsWrapper} class="relative max-w-prose overflow-y-clip text-3xl font-medium">
 		<!-- Word "paragraph" -->
