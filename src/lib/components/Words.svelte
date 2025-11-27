@@ -7,6 +7,7 @@
 	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 	import Mouse from '@lucide/svelte/icons/mouse';
 	import { fly } from 'svelte/transition';
+	import * as Kbd from './ui/kbd';
 
 	const COUNTDOWN = 5 * 1000; // 30 seconds
 	const VISIBLE_LINES = 3;
@@ -406,4 +407,17 @@
 		<RotateCcw />
 		Restart
 	</Button>
+
+	<!-- Hints -->
+	<div
+		class="sized-40 absolute bottom-0 left-1/2 flex -translate-x-1/2 flex-col pb-8 whitespace-nowrap [&_span]:text-sm"
+	>
+		<Kbd.Group>
+			<Kbd.Root>tab</Kbd.Root>
+			<span>+</span>
+			<Kbd.Root>enter</Kbd.Root>
+			<span>-</span>
+			<span>restart test</span>
+		</Kbd.Group>
+	</div>
 </div>
