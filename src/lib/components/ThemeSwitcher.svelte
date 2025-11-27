@@ -10,6 +10,8 @@
 	let y: number;
 
 	const updateTheme = async (value: string) => {
+		document.documentElement.classList.add('animating');
+
 		await document.startViewTransition(() => {
 			document.documentElement.dataset.theme = value;
 			localStorage.setItem('8ff-app-theme', value);
@@ -22,16 +24,18 @@
 		x = x || window.innerWidth;
 		y = y || 0;
 
-		document.documentElement.animate(
+		await document.documentElement.animate(
 			{
 				clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${diagonal}px at ${x}px ${y}px)`]
 			},
 			{
 				duration: 800,
 				easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-				pseudoElement: '::view-transition-new(root)',
+				pseudoElement: '::view-transition-new(root)'
 			}
-		);
+		).finished;
+
+		document.documentElement.classList.remove('animating');
 	};
 
 	onMount(() => {
