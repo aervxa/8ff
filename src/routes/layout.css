@@ -15,9 +15,7 @@
 
 @import './theme-default.css';
 @import './theme-bubblegum.css';
-@import './theme-caffeine.css';
 @import './theme-catppuccin.css';
-@import './theme-darkmatter.css';
 @import './theme-notebook.css';
 
 @theme inline {

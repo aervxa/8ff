@@ -1,9 +1,7 @@
 export const THEMES = [
 	'default',
 	'bubblegum',
-	'caffeine',
 	'catppuccin',
-	'darkmatter',
 	'notebook'
 ] as const;
 
