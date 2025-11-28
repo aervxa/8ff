@@ -118,6 +118,20 @@ The UI of the results run in an `{#if results}`, such that when `results` are av
 
 ## Testing (😅)
 
+> Requires NodeJS
+
+1. Install dependencies via `pnpm`
+
+```
+pnpm install
+```
+
+2. Run for development
+
+```
+pnpm dev
+```
+
 Participate in the typing test until the countdown runs down and see your results. Click "Try again" to participate again.
 
 ## Future roadmap
