@@ -16,9 +16,9 @@ Using the library, `random-words`, 99 words are generated. Each letter gets it's
 
 ```svelte
 {#each wordList as word, index}
-	<span data-word="{index}">
+	<span data-word={index}>
 		{#each word as letter, index}
-			<span data-letter="{index}">{letter}</span>
+			<span data-letter={index}>{letter}</span>
 		{/each}
 	</span>
 {/each}
@@ -33,7 +33,9 @@ A `"keydown"` window listener will be set when the `Words` component is mounted.
 > index needs to be converted to a string via `.toString()` to be a valid selector.
 
 ```js
-docuemnt.querySelector(`[data-word="${wordTrack.toString()}"] > [data-letter="${letterTrack.toString()}"`)
+docuemnt.querySelector(
+	`[data-word="${wordTrack.toString()}"] > [data-letter="${letterTrack.toString()}"`
+);
 ```
 
 The letter's value will then be compared with the character the user inputted, and depending on the result, one of the classes will be applied to said letter's element: `.letter-correct`, `.letter-incorrent`.
@@ -57,7 +59,7 @@ It also allows to remove a whole word by holding either `Ctrl` or `Alt` while pr
 if (e.ctrlKey || e.AltKey) {
 	// Jump to previous word if the current word hasn't been started yet
 	if (letterTrack == 0) {
-		goToPrevWord()
+		goToPrevWord();
 	}
 	// Loop through each letter and remove them
 	for (let i = letterTrack - 1; i >= 0; i--) {
@@ -74,11 +76,11 @@ If the user hasn't typed any letter of their current word and wants to remove a 
 
 ### Countdown Logic
 
-When the user inputs a valid character and thus starts to type the word list, a countdown is started using `requestAnimationFrame` which runs the  `countdownTick` function which gets the delta by subtracting the current time by the time recorded in the last frame, records the time for use of the next frame, subtracts the main countdown by the delta, and then goes recursive (`countdownTick` is a recursive function) until the countdown ends (`countdown <= 0`).
+When the user inputs a valid character and thus starts to type the word list, a countdown is started using `requestAnimationFrame` which runs the `countdownTick` function which gets the delta by subtracting the current time by the time recorded in the last frame, records the time for use of the next frame, subtracts the main countdown by the delta, and then goes recursive (`countdownTick` is a recursive function) until the countdown ends (`countdown <= 0`).
 
 > the time is recorded before running the first `requestAnimationFrame` so the first frame's delta can be calculated accurately.
 
-###  WPM Algorithm
+### WPM Algorithm
 
 The algorithm will be progress-based to prevent mashing the keyboard give a high WPM count regardless of it all being wrong. key presses will still be used to calculate a more accurate accuracy.
 
@@ -118,6 +120,16 @@ The UI of the results run in an `{#if results}`, such that when `results` are av
 
 Participate in the typing test until the countdown runs down and see your results. Click "Try again" to participate again.
 
-## Credit
+## Future roadmap
 
-- ascii-faces - took **some** ascii faces from the package since it didn't work in a browser-environment
+- Implement a settings feature for users to modify settings as they wish
+- Have more test variants, word-based, time-based, and maybe even quote-based
+- Implement on-screen keyboard
+- Multiple layouts without having to actually switch your keyboard layout via your OS (eg. Colemak, Workman, Dvorak)
+- Arabic support
+
+## Inspirations/Credits
+
+- [monkeytime](https://monkeytype.com) - for being so inspiring
+- [ascii-faces](https://www.npmjs.com/package/ascii-faces) - for the kaomojis
+- [shadcn-svelte](https://www.shadcn-svelte.com) and [tweakcn](https://tweakcn.com/editor/theme) - for the awesome skeleton-like components and theming respectively
