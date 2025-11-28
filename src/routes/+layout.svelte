@@ -1,8 +1,8 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.ico';
-	import '@fontsource-variable/red-hat-mono/wght-italic.css';
-	import '@fontsource-variable/red-hat-mono/wght.css';
+	import '@fontsource-variable/red-hat-mono/wght';
+	import '@fontsource-variable/red-hat-mono/wght-italic';
 	import Nav from '$lib/components/Nav.svelte';
 
 	let { children } = $props();
@@ -13,7 +13,7 @@
 </svelte:head>
 
 <div class="flex min-h-full flex-col px-6 font-mono sm:px-8">
-  <Nav />
+	<Nav />
 
 	{@render children()}
 

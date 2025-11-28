@@ -31,7 +31,6 @@
 	--sidebar-accent-foreground: oklch(0.3211 0 0);
 	--sidebar-border: oklch(0.9464 0.0327 307.1745);
 	--sidebar-ring: oklch(0.6559 0.2118 354.3084);
-	--font-mono: Fira Code, monospace;
 	--radius: 0.4rem;
 	--shadow-x: 3px;
 	--shadow-y: 3px;
@@ -90,7 +89,6 @@
 	--sidebar-accent-foreground: oklch(0.2781 0.0296 256.848);
 	--sidebar-border: oklch(0.3729 0.0306 259.7328);
 	--sidebar-ring: oklch(0.6559 0.2118 354.3084);
-	--font-mono: Fira Code, monospace;
 	--radius: 0.4rem;
 	--shadow-x: 3px;
 	--shadow-y: 3px;
