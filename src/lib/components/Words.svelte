@@ -9,8 +9,9 @@
 	import { fly } from 'svelte/transition';
 	import * as Alert from './ui/alert';
 	import Lock from '@lucide/svelte/icons/lock';
+	import { dev } from '$app/environment';
 
-	const COUNTDOWN = 5 * 1000; // 30 seconds
+	const COUNTDOWN = (dev ? 5 : 30) * 1000; // 30 seconds
 	const VISIBLE_LINES = 3;
 	const MAXIMUM_WORDS_PER_LINE = 12; // generates ~1.1 lines.
 
