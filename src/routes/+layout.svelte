@@ -9,6 +9,7 @@
 
 <svelte:head>
 	<link rel="icon" href="/favicon.ico" />
+	<title>Typing Test | 8fastfingers | 8ff</title>
 </svelte:head>
 
 <div class="flex min-h-full flex-col px-6 font-mono sm:px-8">
