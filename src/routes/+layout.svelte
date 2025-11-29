@@ -1,6 +1,5 @@
 <script lang="ts">
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.ico';
 	import '@fontsource-variable/red-hat-mono/wght';
 	import '@fontsource-variable/red-hat-mono/wght-italic';
 	import Nav from '$lib/components/Nav.svelte';
@@ -9,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href="/favicon.ico" />
 </svelte:head>
 
 <div class="flex min-h-full flex-col px-6 font-mono sm:px-8">
