@@ -144,6 +144,6 @@ Participate in the typing test until the countdown runs down and see your result
 
 ## Inspirations/Credits
 
-- [monkeytime](https://monkeytype.com) - for being so inspiring
+- [monkeytype](https://monkeytype.com) - for being so inspiring
 - [ascii-faces](https://www.npmjs.com/package/ascii-faces) - for the kaomojis
 - [shadcn-svelte](https://www.shadcn-svelte.com) and [tweakcn](https://tweakcn.com/editor/theme) - for the awesome skeleton-like components and theming respectively
