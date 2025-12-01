@@ -2,7 +2,7 @@
 
 8ff (8 fast fingers) is a local type testing "application" that gives you a typing test for a certain amount of seconds and gives you your average WPM (words per minute, this is how typing speed is measured).
 
-> This application will be build in Javascript using Svelte as the front-end framework.
+https://github.com/user-attachments/assets/c895f0c9-6a4c-46c0-a3ae-1bc6bf5a6966
 
 ## Specification (😉)
 
