@@ -1,0 +1,107 @@
+[data-theme='blood-moon'] {
+	--background: oklch(0.98 0.008 25); /* Very light, pale red-pink */
+	--foreground: oklch(0.2 0.05 25); /* Very dark, desaturated red */
+	--card: oklch(1 0 0); /* Pure white */
+	--card-foreground: oklch(0.2 0.05 25);
+	--popover: oklch(0.97 0.01 25);
+	--popover-foreground: oklch(0.2 0.05 25);
+	--primary: oklch(0.55 0.22 305); /* Horn purple */
+	--primary-foreground: oklch(1 0 0); /* White */
+	--secondary: oklch(0.94 0.01 25);
+	--secondary-foreground: oklch(0.2 0.05 25);
+	--muted: oklch(0.92 0.01 25);
+	--muted-foreground: oklch(0.3 0.04 25);
+	--accent: oklch(0.46 0.22 25);           /* Vibrant but balanced red */
+  --accent-foreground: oklch(1 0 0);     /* White */
+  --destructive: oklch(0.6 0.22 25);     /* Vibrant but balanced red */
+	--destructive-foreground: oklch(1 0 0);
+	--border: oklch(0.88 0.015 25);
+	--input: oklch(0.94 0.01 25);
+	--ring: oklch(0.55 0.22 305); /* Horn purple */
+	--chart-1: oklch(0.6 0.25 25);
+	--chart-2: oklch(0.55 0.22 305);
+	--chart-3: oklch(0.6 0.15 320);
+	--chart-4: oklch(0.7 0.2 30);
+	--chart-5: oklch(0.5 0.1 290);
+	--sidebar: oklch(0.96 0.01 25);
+	--sidebar-foreground: oklch(0.2 0.05 25);
+	--sidebar-primary: oklch(0.55 0.22 305);
+	--sidebar-primary-foreground: oklch(1 0 0);
+	--sidebar-accent: oklch(0.6 0.25 25);
+	--sidebar-accent-foreground: oklch(1 0 0);
+	--sidebar-border: oklch(0.88 0.015 25);
+	--sidebar-ring: oklch(0.55 0.22 305);
+
+	/* Unchanged properties from your example */
+	--radius: 0.35rem;
+	--shadow-x: 0px;
+	--shadow-y: 4px;
+	--shadow-blur: 6px;
+	--shadow-spread: 0px;
+	--shadow-opacity: 0.12;
+	--shadow-color: hsl(240 30% 25%);
+	--shadow-2xs: 0px 4px 6px 0px hsl(240 30% 25% / 0.06);
+	--shadow-xs: 0px 4px 6px 0px hsl(240 30% 25% / 0.06);
+	--shadow-sm: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 1px 2px -1px hsl(240 30% 25% / 0.12);
+	--shadow: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 1px 2px -1px hsl(240 30% 25% / 0.12);
+	--shadow-md: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 2px 4px -1px hsl(240 30% 25% / 0.12);
+	--shadow-lg: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 4px 6px -1px hsl(240 30% 25% / 0.12);
+	--shadow-xl: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 8px 10px -1px hsl(240 30% 25% / 0.12);
+	--shadow-2xl: 0px 4px 6px 0px hsl(240 30% 25% / 0.3);
+	--tracking-normal: 0em;
+	--spacing: 0.25rem;
+}
+
+/* Blood Moon Dark Theme (NEW) */
+.dark[data-theme='blood-moon'],
+.dark [data-theme='blood-moon'] {
+	--background: oklch(0.2 0.05 25); /* Toned-down dark red (sky) */
+	--foreground: oklch(0.96 0.01 25); /* Light, pale red-white text */
+	--card: oklch(0.23 0.06 25); /* Slightly lighter dark red */
+	--card-foreground: oklch(0.96 0.01 25);
+	--popover: oklch(0.26 0.07 25);
+	--popover-foreground: oklch(0.96 0.01 25);
+	--primary: oklch(0.6 0.2 305); /* Bright horn purple */
+	--primary-foreground: oklch(0.1 0 0); /* Dark text for contrast */
+	--secondary: oklch(0.3 0.08 25);
+	--secondary-foreground: oklch(0.96 0.01 25);
+	--muted: oklch(0.25 0.07 25);
+	--muted-foreground: oklch(0.7 0.02 25);
+	--accent: oklch(0.4 0.19 25);           /* Toned-down blood red */
+  --accent-foreground: oklch(1 0 0);       /* White text */
+  --destructive: oklch(0.55 0.19 25);
+	--destructive-foreground: oklch(1 0 0);
+	--border: oklch(0.3 0.08 25);
+	--input: oklch(0.3 0.08 25);
+	--ring: oklch(0.6 0.2 305); /* Bright horn purple */
+	--chart-1: oklch(0.6 0.24 25);
+	--chart-2: oklch(0.6 0.2 305);
+	--chart-3: oklch(0.7 0.18 320);
+	--chart-4: oklch(0.75 0.22 30);
+	--chart-5: oklch(0.6 0.1 290);
+	--sidebar: oklch(0.18 0.04 25); /* Even darker red sidebar */
+	--sidebar-foreground: oklch(0.96 0.01 25);
+	--sidebar-primary: oklch(0.6 0.2 305);
+	--sidebar-primary-foreground: oklch(0.1 0 0);
+	--sidebar-accent: oklch(0.6 0.24 25);
+	--sidebar-accent-foreground: oklch(1 0 0);
+	--sidebar-border: oklch(0.26 0.07 25);
+	--sidebar-ring: oklch(0.6 0.2 305);
+
+	/* Unchanged properties from your example */
+	--radius: 0.35rem;
+	--shadow-x: 0px;
+	--shadow-y: 4px;
+	--shadow-blur: 6px;
+	--shadow-spread: 0px;
+	--shadow-opacity: 0.12;
+	--shadow-color: hsl(240 30% 25%);
+	--shadow-2xs: 0px 4px 6px 0px hsl(240 30% 25% / 0.06);
+	--shadow-xs: 0px 4px 6px 0px hsl(240 30% 25% / 0.06);
+	--shadow-sm: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 1px 2px -1px hsl(240 30% 25% / 0.12);
+	--shadow: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 1px 2px -1px hsl(240 30% 25% / 0.12);
+	--shadow-md: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 2px 4px -1px hsl(240 30% 25% / 0.12);
+	--shadow-lg: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 4px 6px -1px hsl(240 30% 25% / 0.12);
+	--shadow-xl: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 8px 10px -1px hsl(240 30% 25% / 0.12);
+	--shadow-2xl: 0px 4px 6px 0px hsl(240 30% 25% / 0.3);
+}

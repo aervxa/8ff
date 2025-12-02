@@ -17,6 +17,7 @@
 @import './theme-bubblegum.css';
 @import './theme-catppuccin.css';
 @import './theme-notebook.css';
+@import './theme-blood-moon.css';
 
 @theme inline {
 	--color-background: var(--background);
