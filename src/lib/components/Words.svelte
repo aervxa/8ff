@@ -10,10 +10,12 @@
 	import * as Alert from './ui/alert';
 	import Lock from '@lucide/svelte/icons/lock';
 	import { dev } from '$app/environment';
+	import { generateAr } from '$lib/data/arabic.ts';
 
 	const COUNTDOWN = (dev ? 5 : 30) * 1000; // 30 seconds
 	const VISIBLE_LINES = 3;
 	const MAXIMUM_WORDS_PER_LINE = 12; // generates ~1.1 lines.
+	const RTL = true;
 
 	const {
 		onComplete
@@ -58,7 +60,11 @@
 	};
 
 	const appendWords = (exactly = MAXIMUM_WORDS_PER_LINE * VISIBLE_LINES) => {
-		wordList = [...wordList, ...generate({ exactly, minLength: 1, maxLength: 7 })];
+		if (RTL) {
+			wordList = [...wordList, ...generateAr(exactly)];
+		} else {
+			wordList = [...wordList, ...generate({ exactly, minLength: 1, maxLength: 7 })];
+		}
 	};
 
 	const generateWords = async () => {
@@ -131,11 +137,14 @@
 			if (prevLetter) {
 				const rect = prevLetter.getBoundingClientRect();
 				caret.style.top = rect.y - wordsRect.y + 'px';
-				caret.style.left = `calc(${rect.x - wordsRect.x}px + 1ch)`;
+				caret.style.left = `calc(${rect.x - wordsRect.x}px + ${RTL ? '0px' : '1ch'})`;
 			} else {
-				const rect = word.getBoundingClientRect();
+				// Focus on first letter
+				// SAFETY: at very least one letter always exists.
+				const letter = word.querySelector('.letter:first-of-type')!;
+				const rect = letter.getBoundingClientRect();
 				caret.style.top = rect.y - wordsRect.y + 'px';
-				caret.style.left = rect.x - wordsRect.x + 'px';
+				caret.style.left = `calc(${rect.x - wordsRect.x}px + ${RTL ? '1ch' : '0px'})`;
 			}
 
 			// Calculate distance of word from wrapper to align words
@@ -219,7 +228,10 @@
 	};
 
 	const keyListener = (e: KeyboardEvent) => {
-		const allowedChars = 'AabbCcDdeeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ';
+		const allowedCharsEn = 'AabbCcDdeeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ';
+		const allowedCharsAr = 'ابتثجحخدذرزسشصضطظعغفقكلمنهويءآأؤإئبةىًٌٍَُِّْ';
+		// En HAS TO be appended last to keep the space at the end-most
+		const allowedChars = allowedCharsAr + allowedCharsEn;
 
 		// Check if words list is not focused
 		if (!isWordsFocused) {
@@ -363,7 +375,7 @@
 	});
 </script>
 
-<div in:fly={{ y: 64 }} class="mt-16 mb-48 flex flex-col gap-4 select-none">
+<div dir={RTL ? 'rtl' : 'ltr'} in:fly={{ y: 64 }} class="mt-16 mb-48 flex flex-col gap-4 select-none">
 	<!-- "Header" -->
 	<div class="relative">
 		<!-- Countdown -->
