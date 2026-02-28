@@ -33,6 +33,7 @@
 	let letterTrack = 0;
 	let wordsWrapper: HTMLDivElement;
 	let words: HTMLDivElement;
+	let wordsInput: HTMLInputElement;
 	let isWordsFocused = $state(false);
 	let caret: HTMLSpanElement;
 
@@ -361,7 +362,7 @@
 		// Generate words
 		generateWords();
 		// Add listener for user input
-		window.addEventListener('keydown', keyListener);
+		wordsInput.addEventListener('keydown', keyListener);
 
 		// Wait till DOM update word generation
 		tick().then(() => {
@@ -370,12 +371,16 @@
 		});
 
 		return () => {
-			window.removeEventListener('keydown', keyListener);
+			wordsInput.removeEventListener('keydown', keyListener);
 		};
 	});
 </script>
 
-<div dir={RTL ? 'rtl' : 'ltr'} in:fly={{ y: 64 }} class="mt-16 mb-48 flex flex-col gap-4 select-none">
+<div
+	dir={RTL ? 'rtl' : 'ltr'}
+	in:fly={{ y: 64 }}
+	class="mt-16 mb-48 flex flex-col gap-4 select-none"
+>
 	<!-- "Header" -->
 	<div class="relative">
 		<!-- Countdown -->
@@ -400,23 +405,29 @@
 		{/if}
 	</div>
 	<!-- Words wrapper -->
-	<div bind:this={wordsWrapper} class="relative max-w-prose overflow-y-clip text-3xl font-medium">
-		<!-- Word "paragraph" -->
-		<div
-			bind:this={words}
-			class="peer group relative z-0 flex flex-wrap gap-x-[1ch] outline-none max-sm:justify-center"
-			tabindex="0"
-			role="listbox"
+	<div
+		bind:this={wordsWrapper}
+		class="group relative max-w-prose overflow-y-clip text-3xl font-medium"
+	>
+		<input
+			bind:this={wordsInput}
 			onfocus={() => {
 				isWordsFocused = true;
 			}}
 			onblur={() => {
 				isWordsFocused = false;
 			}}
+			class="peer absolute inset-0 z-20 opacity-0"
+			aria-label="Focus on words input"
+		/>
+		<!-- Word "paragraph" -->
+		<div
+			bind:this={words}
+			class="relative z-0 flex flex-wrap gap-x-[1ch] outline-none max-sm:justify-center"
 		>
 			<span
 				bind:this={caret}
-				class="pointer-events-none invisible absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary group-focus:visible"
+				class="pointer-events-none invisible absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary group-focus-within:visible"
 			></span>
 			{#each wordList as word, index}
 				<span data-word={index} class="word">
