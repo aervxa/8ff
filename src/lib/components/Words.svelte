@@ -231,66 +231,55 @@
 	const keyListener = (e: KeyboardEvent) => {
 		const allowedCharsEn = 'AabbCcDdeeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ';
 		const allowedCharsAr = 'ابتثجحخدذرزسشصضطظعغفقكلمنهويءآأؤإئبةىًٌٍَُِّْ';
-		// En HAS TO be appended last to keep the space at the end-most
+		// En HAS TO be appended last to keep the space at the end-most (for compat with use of .trim())
 		const allowedChars = allowedCharsAr + allowedCharsEn;
 
-		// Check if words list is not focused
-		if (!isWordsFocused) {
-			// If valid char is pressed, focus on the word (we don't want any key to focus back)
-			// remove " " to let user press buttons with Space when not focused
-			if (allowedChars.slice(0, -1).includes(e.key)) {
-				words.focus();
+		// Check if caps lock is turned on and show the warning
+		const capsLockState = e.getModifierState('CapsLock');
+		if (capsLockState == true) {
+			clearTimeout(capsLockTimeout);
+			capsLock = capsLockState;
+			capsLockTimeout = setTimeout(() => {
+				capsLock = false;
+			}, 2000);
+		}
+
+		// For removing letter
+		if (e.key == 'Backspace') {
+			if (e.ctrlKey || e.altKey) {
+				if (letterTrack == 0) {
+					// Jump to previous word if the current word hasn't been started yet
+					gotoPrevWord();
+				}
+				// Loop through each letter and remove them
+				for (let i = letterTrack - 1; i >= 0; i--) {
+					removeLetter(i);
+				}
+			} else {
+				// Remove letter
+				removeLetter(letterTrack - 1);
 			}
+
+			updateCaret();
+		}
+
+		// Cancel if any system/app modifier key is being pressed
+		if (e.ctrlKey || e.altKey || e.metaKey) {
 			return;
 		}
+
+		// Ignore if chars are not allowed
+		if (!allowedChars.includes(e.key)) {
+			return;
+		}
+
+		// prevent default behavior if valid key is pressed
+		e.preventDefault();
 
 		// Select word and letter
 		const word = words.querySelector(`.word[data-word="${wordTrack.toString()}"]`);
 		if (word) {
 			const letter = word.querySelector(`.letter[data-letter="${letterTrack.toString()}"]`);
-
-			// For removing letter
-			if (e.key == 'Backspace') {
-				e.preventDefault();
-				if (e.ctrlKey || e.altKey) {
-					if (letterTrack == 0) {
-						// Jump to previous word if the current word hasn't been started yet
-						gotoPrevWord();
-					}
-					// Loop through each letter and remove them
-					for (let i = letterTrack - 1; i >= 0; i--) {
-						removeLetter(i);
-					}
-				} else {
-					// Remove letter
-					removeLetter(letterTrack - 1);
-				}
-
-				updateCaret();
-			}
-
-			// Cancel if any system/app modifier key is being pressed
-			if (e.ctrlKey || e.altKey || e.metaKey) {
-				return;
-			}
-
-			// Ignore if chars are not allowed
-			if (!allowedChars.includes(e.key)) {
-				return;
-			}
-
-			// prevent default behavior if valid key is pressed
-			e.preventDefault();
-
-			// Check if caps lock is turned on and show the warning
-			const capsLockState = e.getModifierState('CapsLock');
-			if (capsLockState == true) {
-				clearTimeout(capsLockTimeout);
-				capsLock = capsLockState;
-				capsLockTimeout = setTimeout(() => {
-					capsLock = false;
-				}, 2000);
-			}
 
 			// increment tracking var
 			totalKeyPresses++;
