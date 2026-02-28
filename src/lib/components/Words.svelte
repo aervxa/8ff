@@ -31,7 +31,7 @@
 	// words
 	let wordTrack = 0;
 	let letterTrack = 0;
-	let wordsWrapper: HTMLDivElement;
+	let wordsScroll: HTMLDivElement;
 	let words: HTMLDivElement;
 	let wordsInput: HTMLInputElement;
 	let isWordsFocused = $state(false);
@@ -150,12 +150,12 @@
 
 			// Calculate distance of word from wrapper to align words
 			const wordRect = word.getBoundingClientRect();
-			const wordsWrapperRect = wordsWrapper.getBoundingClientRect();
-			const distanceFromWrapper = wordRect.y - wordsWrapperRect.y;
+			const wordsScrollRect = wordsScroll.getBoundingClientRect();
+			const distanceFromWrapper = wordRect.y - wordsScrollRect.y;
 			// If word is on the thrid line (second line would make distance closely EQUAL to height)
 			if (distanceFromWrapper > word.clientHeight) {
 				// Get how much words is alr translated
-				const delta = wordsWrapperRect.y - wordsRect.y;
+				const delta = wordsScrollRect.y - wordsRect.y;
 				// Translate words up by height of a word (next line effect)
 				words.style.translate = `0 -${Math.round(delta + word.clientHeight)}px`;
 
@@ -366,8 +366,8 @@
 
 		// Wait till DOM update word generation
 		tick().then(() => {
-			// Set fixed height of wordsWrapper to 3 times the height of a word (for 3 lines)
-			wordsWrapper.style.height = (words.querySelector('.word')?.clientHeight || 1) * 3 + 'px';
+			// Set fixed height of wordsScroll to 3 times the height of a word (for 3 lines)
+			wordsScroll.style.height = (words.querySelector('.word')?.clientHeight || 1) * 3 + 'px';
 		});
 
 		return () => {
@@ -405,10 +405,8 @@
 		{/if}
 	</div>
 	<!-- Words wrapper -->
-	<div
-		bind:this={wordsWrapper}
-		class="group relative max-w-prose overflow-y-clip text-3xl font-medium"
-	>
+	<div class="group relative overflow-visible">
+		<!-- Word input -->
 		<input
 			bind:this={wordsInput}
 			onfocus={() => {
@@ -420,31 +418,35 @@
 			class="peer absolute inset-0 z-20 opacity-0"
 			aria-label="Focus on words input"
 		/>
-		<!-- Word "paragraph" -->
-		<div
-			bind:this={words}
-			class="relative z-0 flex flex-wrap gap-x-[1ch] outline-none max-sm:justify-center"
-		>
-			<span
-				bind:this={caret}
-				class="pointer-events-none invisible absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary group-focus-within:visible"
-			></span>
-			{#each wordList as word, index}
-				<span data-word={index} class="word">
-					{#each word as letter, index}
-						<span data-letter={index} class="letter">
-							{letter}
-						</span>
-					{/each}
-				</span>
-			{/each}
-		</div>
 		<!-- No focus warning -->
 		<div
-			class="pointer-events-none absolute -inset-x-2 inset-y-0 z-10 flex items-center-safe justify-center-safe gap-4 backdrop-blur-sm duration-300 peer-focus:opacity-0 peer-focus:delay-0 in-[:root.animating]:bg-background in-[:root.animating]:duration-0"
+			class="pointer-events-none absolute -inset-4 z-10 flex items-center-safe justify-center-safe gap-4 backdrop-blur-sm duration-300 peer-focus:opacity-0 peer-focus:delay-0 in-[:root.animating]:bg-background in-[:root.animating]:duration-0"
 		>
 			<Mouse />
 			<p class="text-lg">Click here or press any key to focus</p>
+		</div>
+
+		<!-- Words scroll -->
+		<div bind:this={wordsScroll} class="relative max-w-prose overflow-y-clip text-3xl font-medium">
+			<!-- Word "paragraph" -->
+			<div
+				bind:this={words}
+				class="relative z-0 flex flex-wrap gap-x-[1ch] outline-none max-sm:justify-center"
+			>
+				<span
+					bind:this={caret}
+					class="pointer-events-none invisible absolute z-10 h-[1.3em] w-0.75 -translate-x-0.5 translate-y-1 animate-pulse rounded-full bg-primary group-focus-within:visible"
+				></span>
+				{#each wordList as word, index}
+					<span data-word={index} class="word">
+						{#each word as letter, index}
+							<span data-letter={index} class="letter">
+								{letter}
+							</span>
+						{/each}
+					</span>
+				{/each}
+			</div>
 		</div>
 	</div>
 	<!-- Restart button -->
