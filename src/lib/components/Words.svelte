@@ -399,6 +399,7 @@
 		<input
 			bind:this={wordsInput}
 			onfocus={() => {
+				updateCaret();
 				isWordsFocused = true;
 			}}
 			onblur={() => {
