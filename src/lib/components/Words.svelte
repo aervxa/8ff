@@ -62,7 +62,7 @@
 
 	const appendWords = (exactly = MAXIMUM_WORDS_PER_LINE * VISIBLE_LINES) => {
 		if (RTL) {
-			wordList = [...wordList, ...generateAr(exactly)];
+			wordList = [...wordList, ...generateAr(exactly * 2)];
 		} else {
 			wordList = [...wordList, ...generate({ exactly, minLength: 1, maxLength: 7 })];
 		}
