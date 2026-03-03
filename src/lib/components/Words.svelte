@@ -86,13 +86,10 @@
 		// generate (new) words in wordList
 		appendWords();
 
-		// Update caret to positioning after updating DOM once again
+		// Focus on words elm after updating DOM once again (caret pos is reset by input's focus listener)
 		tick().then(() => {
-			updateCaret();
+			wordsInput.focus();
 		});
-
-		// Focus on words elm
-		wordsInput.focus();
 	};
 
 	const countdownTick = () => {
@@ -162,9 +159,6 @@
 				// append more words
 				appendWords(MAXIMUM_WORDS_PER_LINE);
 			}
-		} else {
-			// Remove caret when no words (after reaching end of wordlist)
-			caret.remove();
 		}
 	};
 
