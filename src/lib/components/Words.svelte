@@ -92,7 +92,7 @@
 		});
 
 		// Focus on words elm
-		words.focus();
+		wordsInput.focus();
 	};
 
 	const countdownTick = () => {
