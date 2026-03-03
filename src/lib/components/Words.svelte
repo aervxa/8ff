@@ -228,20 +228,19 @@
 		}
 	};
 
+	const allowedCharsEn = 'AabbCcDdeeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
+	const allowedCharsAr = 'ابتثجحخدذرزسشصضطظعغفقكلمنهويءآأؤإئبةىًٌٍَُِّْ';
+	const allowedChars = allowedCharsAr + allowedCharsEn + ' ';
 	const keyListener = (e: KeyboardEvent) => {
-		const allowedCharsEn = 'AabbCcDdeeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ';
-		const allowedCharsAr = 'ابتثجحخدذرزسشصضطظعغفقكلمنهويءآأؤإئبةىًٌٍَُِّْ';
-		// En HAS TO be appended last to keep the space at the end-most (for compat with use of .trim())
-		const allowedChars = allowedCharsAr + allowedCharsEn;
+		// space has to be appended last (for compat with use of .trim())
 
 		// Check if caps lock is turned on and show the warning
 		const capsLockState = e.getModifierState('CapsLock');
 		if (capsLockState == true) {
 			clearTimeout(capsLockTimeout);
 			capsLock = capsLockState;
-			capsLockTimeout = setTimeout(() => {
-				capsLock = false;
-			}, 2000);
+			capsLockTimeout = setTimeout(() => {}, 2000);
+			capsLock = false;
 		}
 
 		// For removing letter
@@ -347,11 +346,19 @@
 		}
 	};
 
+	const documentKeyListener = (e: KeyboardEvent) => {
+		// If key press is a letter
+		if (allowedChars.trim().includes(e.key) && !isWordsFocused) {
+			wordsInput.focus();
+		}
+	};
+
 	onMount(() => {
 		// Generate words
 		generateWords();
 		// Add listener for user input
 		wordsInput.addEventListener('keydown', keyListener);
+		document.addEventListener('keydown', documentKeyListener);
 
 		// Wait till DOM update word generation
 		tick().then(() => {
@@ -361,6 +368,7 @@
 
 		return () => {
 			wordsInput.removeEventListener('keydown', keyListener);
+			document.removeEventListener('keydown', documentKeyListener);
 		};
 	});
 </script>
@@ -407,6 +415,7 @@
 			}}
 			class="peer absolute inset-0 z-20 opacity-0"
 			aria-label="Focus on words input"
+			autofocus
 		/>
 		<!-- No focus warning -->
 		<div
