@@ -68,21 +68,7 @@
 		}
 	};
 
-	const generateWords = async () => {
-		if (wordList.length > 0) {
-			// empty wordList to remove UI states
-			wordList = [];
-			// reset word index tracks
-			wordTrack = 0;
-			letterTrack = 0;
-			// Reset countdown
-			stopCountdown();
-			countdown = COUNTDOWN;
-
-			// Skip tick (will run after DOM updates according to empty wordList)
-			await tick();
-		}
-
+	const generateWords = () => {
 		// generate (new) words in wordList
 		appendWords();
 
@@ -91,10 +77,26 @@
 			updateCaret();
 		});
 
-		// Focus on words elm after updating DOM once again (caret pos is reset by input's focus listener)
-		tick().then(() => {
-			wordsInput.focus();
-		});
+		// Focus on words input elm
+		wordsInput.focus();
+	};
+
+	const restart = async () => {
+		// empty wordList to remove UI states
+		wordList = [];
+		// reset word index tracks
+		wordTrack = 0;
+		letterTrack = 0;
+		// Reset countdown
+		stopCountdown();
+		countdown = COUNTDOWN;
+
+		// Clear result tracking
+		correctWordLetters = 0;
+		totalKeyPresses = 0;
+		correctKeyPresses = 0;
+
+		generateWords();
 	};
 
 	const countdownTick = () => {
@@ -452,7 +454,7 @@
 		class="mt-2 self-center"
 		variant="ghost"
 		onclick={() => {
-			generateWords();
+			restart();
 		}}
 	>
 		<RotateCcw />
