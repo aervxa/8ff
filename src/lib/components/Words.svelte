@@ -93,7 +93,9 @@
 		totalKeyPresses = 0;
 		correctKeyPresses = 0;
 
-		generateWords();
+		tick().then(() => {
+			generateWords();
+		});
 	};
 
 	const countdownTick = () => {
