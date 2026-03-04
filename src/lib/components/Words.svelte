@@ -11,11 +11,11 @@
 	import Lock from '@lucide/svelte/icons/lock';
 	import { dev } from '$app/environment';
 	import { generateAr } from '$lib/data/arabic.ts';
+	import { lang, langs } from '$lib/lang.svelte';
 
 	const COUNTDOWN = (dev ? 5 : 30) * 1000; // 30 seconds
 	const VISIBLE_LINES = 3;
 	const MAXIMUM_WORDS_PER_LINE = 12; // generates ~1.1 lines.
-	const RTL = true;
 
 	const {
 		onComplete
@@ -61,7 +61,7 @@
 	};
 
 	const appendWords = (exactly = MAXIMUM_WORDS_PER_LINE * VISIBLE_LINES) => {
-		if (RTL) {
+		if (lang == 'ar') {
 			wordList = [...wordList, ...generateAr(exactly * 2)];
 		} else {
 			wordList = [...wordList, ...generate({ exactly, minLength: 1, maxLength: 7 })];
@@ -135,14 +135,14 @@
 			if (prevLetter) {
 				const rect = prevLetter.getBoundingClientRect();
 				caret.style.top = rect.y - wordsRect.y + 'px';
-				caret.style.left = `calc(${rect.x - wordsRect.x}px + ${RTL ? '0px' : '1ch'})`;
+				caret.style.left = `calc(${rect.x - wordsRect.x}px + ${langs[lang].dir == 'rtl' ? '0px' : '1ch'})`;
 			} else {
 				// Focus on first letter
 				// SAFETY: at very least one letter always exists.
 				const letter = word.querySelector('.letter:first-of-type')!;
 				const rect = letter.getBoundingClientRect();
 				caret.style.top = rect.y - wordsRect.y + 'px';
-				caret.style.left = `calc(${rect.x - wordsRect.x}px + ${RTL ? '1ch' : '0px'})`;
+				caret.style.left = `calc(${rect.x - wordsRect.x}px + ${langs[lang].dir == 'rtl' ? '1ch' : '0px'})`;
 			}
 
 			// Calculate distance of word from wrapper to align words
@@ -367,11 +367,7 @@
 	});
 </script>
 
-<div
-	dir={RTL ? 'rtl' : 'ltr'}
-	in:fly={{ y: 64 }}
-	class="mt-16 mb-48 flex flex-col gap-4 select-none"
->
+<div dir={langs[lang].dir} in:fly={{ y: 64 }} class="mt-16 mb-48 flex flex-col gap-4 select-none">
 	<!-- "Header" -->
 	<div class="relative">
 		<!-- Countdown -->
