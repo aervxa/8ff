@@ -43,7 +43,6 @@
 	let animationFrame = 0;
 
 	// result tracking
-	let correctWordLetters = 0;
 	let totalKeyPresses = 0;
 	let correctKeyPresses = 0;
 
@@ -51,13 +50,12 @@
 		// Get elapsed tiem in minutes
 		const elapsed = COUNTDOWN / 1000 / 60; // COUNTDOWN is in ms;
 		// Get results
-		const wpm = Math.round((correctWordLetters + wordTrack) / 5 / elapsed);
 		const rwpm = Math.round(totalKeyPresses / 5 / elapsed);
 		const acc = Math.round((correctKeyPresses / totalKeyPresses) * 100);
-		const rawpm = Math.round(rwpm * (acc / 100));
+		const wpm = Math.round(rwpm * (acc / 100));
 
 		// Pass results onto parent comp
-		onComplete({ wpm, rwpm, acc, rawpm });
+		onComplete({ wpm, rwpm, acc });
 	};
 
 	const appendWords = (exactly = MAXIMUM_WORDS_PER_LINE * VISIBLE_LINES) => {
@@ -92,7 +90,6 @@
 		countdown = COUNTDOWN;
 
 		// Clear result tracking
-		correctWordLetters = 0;
 		totalKeyPresses = 0;
 		correctKeyPresses = 0;
 
@@ -281,11 +278,11 @@
 		if (word) {
 			const letter = word.querySelector(`.letter[data-letter="${letterTrack.toString()}"]`);
 
-			// increment tracking var
-			totalKeyPresses++;
-
 			// If key press is a letter
 			if (allowedChars.trim().includes(e.key)) {
+				// increment tracking var
+				totalKeyPresses++;
+
 				// Start countdown (countdown only starts from allowedChars excluding spaces)
 				if (countdown == COUNTDOWN) {
 					startCountdown();
@@ -330,19 +327,10 @@
 					// make word state wrong
 					word.classList.add('incorrect');
 				}
-				// If word does not cintain any wrong states
-				else {
-					// Increment length of correct letters into correctWordLetters
-					const letters = word.querySelectorAll('.letter.correct');
-					correctWordLetters += letters.length;
-				}
 
 				wordTrack++;
 				letterTrack = 0;
 				updateCaret();
-
-				// incrememnt tracking var
-				correctKeyPresses++;
 			}
 		}
 	};

@@ -47,13 +47,9 @@
 			<p class="text-4xl leading-relaxed">{results.acc}<span class="ml-1">%</span></p>
 		</div>
 
-		<div class="flex flex-col text-center font-medium">
+		<div class="col-span-2 flex flex-col text-center font-medium">
 			<p class="text-base tracking-wide opacity-60">rwpm</p>
 			<p class="text-2xl leading-snug opacity-80">{results.rwpm}</p>
-		</div>
-		<div class="flex flex-col text-center font-medium">
-			<p class="text-base tracking-wide opacity-60">rawpm</p>
-			<p class="text-2xl leading-snug opacity-80">{results.rawpm}</p>
 		</div>
 	</div>
 
