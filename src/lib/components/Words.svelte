@@ -86,6 +86,11 @@
 		// generate (new) words in wordList
 		appendWords();
 
+		// Reset caret AFTER new words are appended (added)
+		tick().then(() => {
+			updateCaret();
+		});
+
 		// Focus on words elm after updating DOM once again (caret pos is reset by input's focus listener)
 		tick().then(() => {
 			wordsInput.focus();
@@ -358,6 +363,11 @@
 		tick().then(() => {
 			// Set fixed height of wordsScroll to 3 times the height of a word (for 3 lines)
 			wordsScroll.style.height = (words.querySelector('.word')?.clientHeight || 1) * 3 + 'px';
+
+			// Timeout is needed to make caret always update correctly
+			setTimeout(() => {
+				updateCaret();
+			}, 0);
 		});
 
 		return () => {
@@ -397,7 +407,6 @@
 		<input
 			bind:this={wordsInput}
 			onfocus={() => {
-				updateCaret();
 				isWordsFocused = true;
 			}}
 			onblur={() => {
