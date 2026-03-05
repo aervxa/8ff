@@ -1,10 +1,11 @@
 <script>
 	import Logo from './Logo.svelte';
 	import ThemeSwitcher from './ThemeSwitcher.svelte';
+	import LanguageSwitcher from './LanguageSwitcher.svelte';
 </script>
 
 <nav
-	class="mx-auto flex h-13 w-full max-w-prose translate-y-4 justify-between self-center rounded-xl border border-border p-2 text-3xl z-10"
+	class="z-10 mx-auto flex h-13 w-full max-w-prose translate-y-4 justify-between self-center rounded-xl border border-border p-2 text-3xl"
 >
 	<div class="flex gap-3 px-2 py-1 select-none [&>svg]:shrink-0 [&>svg]:opacity-80">
 		<Logo />
@@ -16,6 +17,7 @@
 		</div>
 	</div>
 	<div class="flex gap-3">
+		<LanguageSwitcher />
 		<ThemeSwitcher />
 	</div>
 </nav>

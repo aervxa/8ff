@@ -59,7 +59,7 @@
 	};
 
 	const appendWords = (exactly = MAXIMUM_WORDS_PER_LINE * VISIBLE_LINES) => {
-		if (lang == 'ar') {
+		if (lang.value == 'ar') {
 			wordList = [...wordList, ...generateAr(exactly * 2)];
 		} else {
 			wordList = [...wordList, ...generate({ exactly, minLength: 1, maxLength: 7 })];
@@ -141,14 +141,14 @@
 			if (prevLetter) {
 				const rect = prevLetter.getBoundingClientRect();
 				caret.style.top = rect.y - wordsRect.y + 'px';
-				caret.style.left = `calc(${rect.x - wordsRect.x}px + ${langs[lang].dir == 'rtl' ? '0px' : '1ch'})`;
+				caret.style.left = `calc(${rect.x - wordsRect.x}px + ${langs[lang.value].dir == 'rtl' ? '0px' : '1ch'})`;
 			} else {
 				// Focus on first letter
 				// SAFETY: at very least one letter always exists.
 				const letter = word.querySelector('.letter:first-of-type')!;
 				const rect = letter.getBoundingClientRect();
 				caret.style.top = rect.y - wordsRect.y + 'px';
-				caret.style.left = `calc(${rect.x - wordsRect.x}px + ${langs[lang].dir == 'rtl' ? '1ch' : '0px'})`;
+				caret.style.left = `calc(${rect.x - wordsRect.x}px + ${langs[lang.value].dir == 'rtl' ? '1ch' : '0px'})`;
 			}
 
 			// Calculate distance of word from wrapper to align words
@@ -369,7 +369,11 @@
 	});
 </script>
 
-<div dir={langs[lang].dir} in:fly={{ y: 64 }} class="mt-16 mb-48 flex flex-col gap-4 select-none">
+<div
+	dir={langs[lang.value].dir}
+	in:fly={{ y: 64 }}
+	class="mt-16 mb-48 flex flex-col gap-4 select-none"
+>
 	<!-- "Header" -->
 	<div class="relative">
 		<!-- Countdown -->
